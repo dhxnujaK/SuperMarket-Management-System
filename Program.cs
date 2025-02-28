@@ -16,7 +16,8 @@ namespace DSA_SuperMarket_Management_System
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            ItemDatabase.Initialize();
+            Application.Run(new MainForm());
         }
     }
 }
