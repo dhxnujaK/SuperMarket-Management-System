@@ -29,10 +29,7 @@ namespace DSA_SuperMarket_Management_System
             root = InsertRecursively(key, root);
         }
 
-        public void InsertKeyIteration(int key)
-        {
-            InsertIteratively(key);
-        }
+       
 
         public void Delete(int key)
         {
