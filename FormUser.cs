@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace DSA_SuperMarket_Management_System
@@ -13,8 +14,11 @@ namespace DSA_SuperMarket_Management_System
         public FormUser()
         {
             InitializeComponent();
+            this.StartPosition = FormStartPosition.CenterScreen; // ✅ Center form on start
             CloseRunningInstances(); // Close any locked instances
             InitializeDatabase();
+            CustomizeDataGridView(); // ✅ Enhance DataGridView UI
+            CustomizeUI(); // ✅ Improve button & input field styling
             LoadUserData();
         }
 
@@ -26,7 +30,7 @@ namespace DSA_SuperMarket_Management_System
                 if (process.Id != Process.GetCurrentProcess().Id)
                 {
                     process.Kill();
-                    process.WaitForExit();  // Ensure process is completely stopped
+                    process.WaitForExit(); // Ensure process is completely stopped
                 }
             }
         }
@@ -106,9 +110,9 @@ namespace DSA_SuperMarket_Management_System
                     }
 
                     MessageBox.Show("User saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadUserData(); // Refresh DataGridView
+                    LoadUserData(); // ✅ Refresh DataGridView
 
-                    // Clear input fields
+                    // ✅ Clear input fields
                     textBox1.Clear();
                     textBox2.Clear();
                     textBox4.Clear();
@@ -146,6 +150,7 @@ namespace DSA_SuperMarket_Management_System
                             dataGridView1.DataSource = dataTable;
                             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
                             dataGridView1.AutoResizeColumns();
+                            dataGridView1.Refresh(); // ✅ Ensure real-time updates
                         }
                     }
                 }
@@ -159,6 +164,48 @@ namespace DSA_SuperMarket_Management_System
         private bool IsValidNIC(string nic)
         {
             return nic.Length == 10 || nic.Length == 12; // Example NIC validation
+        }
+
+        // ✅ Improve DataGridView Styling
+        private void CustomizeDataGridView()
+        {
+            dataGridView1.BorderStyle = BorderStyle.FixedSingle;
+            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dataGridView1.DefaultCellStyle.BackColor = Color.WhiteSmoke;
+            dataGridView1.DefaultCellStyle.ForeColor = Color.Black;
+            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.DarkBlue;
+            dataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            dataGridView1.EnableHeadersVisualStyles = false;
+
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+        // ✅ Improve UI Styling (Button & Input Fields)
+        private void CustomizeUI()
+        {
+            button1.BackColor = Color.Navy;
+            button1.ForeColor = Color.White;
+            button1.Font = new Font("Segoe UI", 11, FontStyle.Bold);
+            button1.FlatStyle = FlatStyle.Flat;
+            button1.FlatAppearance.BorderSize = 0;
+
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox txt = (TextBox)ctrl;
+                    txt.Font = new Font("Segoe UI", 10);
+                    txt.BackColor = Color.White;
+                    txt.ForeColor = Color.Black;
+                    txt.BorderStyle = BorderStyle.FixedSingle;
+                }
+            }
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
