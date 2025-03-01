@@ -7,73 +7,83 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Guna.UI2.WinForms; // ✅ Install via NuGet: Install-Package Guna.UI2.WinForms
+using Guna.UI2.WinForms;
 
 namespace DSA_SuperMarket_Management_System
 {
     public partial class MainForm : Form
     {
-        private Panel titleBar;
-        private Button closeButton;
-        private Panel sidebar;
-        private Button btnItems, btnUsers;
-        private Guna2ShadowForm shadowEffect; // ✅ Shadow effect for a modern look
+        private Guna2Panel titleBar;
+        private Guna2Button closeButton, toggleDarkMode;
+        private Guna2Panel sidebar;
+        private Guna2Button btnItems, btnUsers;
+        private Guna2ShadowForm shadowEffect;
+        private bool isDarkMode = false;
 
         public MainForm()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None; // ✅ Remove Windows border
-            this.StartPosition = FormStartPosition.CenterScreen; // ✅ Center form
-            this.BackColor = Color.FromArgb(240, 240, 240); // ✅ Modern background color
+            this.FormBorderStyle = FormBorderStyle.None;
+            this.StartPosition = FormStartPosition.CenterScreen;
+            this.BackColor = Color.FromArgb(240, 240, 240);
 
-            ApplyShadow(); // ✅ Apply shadow effect
-            CreateCustomTitleBar(); // ✅ Custom title bar
-            CreateSidebar(); // ✅ Modern sidebar
+            ApplyShadow();
+            CreateCustomTitleBar();
+            CreateSidebar();
         }
 
-        // ✅ Apply shadow effect for modern UI
         private void ApplyShadow()
         {
             shadowEffect = new Guna2ShadowForm();
             shadowEffect.SetShadowForm(this);
         }
 
-        // ✅ Create a custom title bar
         private void CreateCustomTitleBar()
         {
-            titleBar = new Panel
+            titleBar = new Guna2Panel
             {
-                Height = 40,
+                Height = 50,
                 Dock = DockStyle.Top,
-                BackColor = Color.Navy
+                BackColor = Color.Navy,
+                BorderRadius = 5
             };
             this.Controls.Add(titleBar);
 
-            Label titleLabel = new Label
+            Guna2HtmlLabel titleLabel = new Guna2HtmlLabel
             {
                 Text = "SuperMarket Management",
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Font = new Font("Segoe UI", 14, FontStyle.Bold),
                 AutoSize = true,
-                Location = new Point(10, 10)
+                Location = new Point(15, 15)
             };
             titleBar.Controls.Add(titleLabel);
 
-            closeButton = new Button
+            toggleDarkMode = new Guna2Button
             {
-                Text = "X",
+                Text = "☾",
                 ForeColor = Color.White,
-                BackColor = Color.Navy,
-                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
                 Width = 40,
                 Height = 40,
                 Dock = DockStyle.Right
             };
-            closeButton.FlatAppearance.BorderSize = 0;
+            toggleDarkMode.Click += ToggleDarkMode;
+            titleBar.Controls.Add(toggleDarkMode);
+
+            closeButton = new Guna2Button
+            {
+                Text = "X",
+                ForeColor = Color.White,
+                BackColor = Color.Red,
+                BorderRadius = 5,
+                Width = 40,
+                Height = 40,
+                Dock = DockStyle.Right
+            };
             closeButton.Click += (s, e) => this.Close();
             titleBar.Controls.Add(closeButton);
 
-            // ✅ Enable dragging of the form
             titleBar.MouseDown += (s, e) =>
             {
                 this.Capture = false;
@@ -81,72 +91,82 @@ namespace DSA_SuperMarket_Management_System
                 this.WndProc(ref msg);
             };
         }
-
-        // ✅ Create a sidebar menu
+        
         private void CreateSidebar()
         {
-            sidebar = new Panel
+            sidebar = new Guna2Panel
             {
-                Width = 200,
+                Width = 220,
                 Dock = DockStyle.Left,
-                BackColor = Color.FromArgb(30, 30, 60)
+                BackColor = Color.FromArgb(30, 30, 60),
+                BorderRadius = 5
             };
             this.Controls.Add(sidebar);
 
-            btnItems = new Button
+            btnItems = new Guna2Button
             {
                 Text = "Manage Items",
                 Dock = DockStyle.Top,
-                Height = 50,
-                BackColor = Color.FromArgb(45, 45, 80),
+                Height = 60,
+                BorderRadius = 5,
+                FillColor = Color.FromArgb(45, 45, 80),
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 11, FontStyle.Bold),
-                FlatStyle = FlatStyle.Flat
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Animated = true
             };
-            btnItems.FlatAppearance.BorderSize = 0;
             btnItems.Click += btnItems_Click;
 
-            btnUsers = new Button
+            btnUsers = new Guna2Button
             {
                 Text = "Manage Users",
                 Dock = DockStyle.Top,
-                Height = 50,
-                BackColor = Color.FromArgb(45, 45, 80),
+                Height = 60,
+                BorderRadius = 5,
+                FillColor = Color.FromArgb(45, 45, 80),
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 11, FontStyle.Bold),
-                FlatStyle = FlatStyle.Flat
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Animated = true
             };
-            btnUsers.FlatAppearance.BorderSize = 0;
             btnUsers.Click += btnUsers_Click;
 
             sidebar.Controls.Add(btnUsers);
             sidebar.Controls.Add(btnItems);
         }
 
-        // ✅ Button click event to open FormItem
+        private void ToggleDarkMode(object sender, EventArgs e)
+        {
+            isDarkMode = !isDarkMode;
+            this.BackColor = isDarkMode ? Color.FromArgb(30, 30, 30) : Color.FromArgb(240, 240, 240);
+            sidebar.BackColor = isDarkMode ? Color.FromArgb(20, 20, 40) : Color.FromArgb(30, 30, 60);
+            titleBar.BackColor = isDarkMode ? Color.Black : Color.Navy;
+            btnItems.FillColor = isDarkMode ? Color.FromArgb(50, 50, 70) : Color.FromArgb(45, 45, 80);
+            btnUsers.FillColor = isDarkMode ? Color.FromArgb(50, 50, 70) : Color.FromArgb(45, 45, 80);
+            titleBar.Controls[0].ForeColor = isDarkMode ? Color.LightGray : Color.White;
+            toggleDarkMode.Text = isDarkMode ? "☼" : "☾";
+        }
+
         private void btnItems_Click(object sender, EventArgs e)
         {
             FormItem formItem = new FormItem();
-            this.Hide(); // Hide MainForm
-            formItem.ShowDialog(); // Open FormItem in modal mode
-            this.Show(); // Show MainForm again after FormItem is closed
+            this.Hide();
+            formItem.ShowDialog();
+            this.Show();
         }
 
-        // ✅ Button click event to open FormUser
         private void btnUsers_Click(object sender, EventArgs e)
         {
             FormUser formUser = new FormUser();
-            this.Hide(); // Hide MainForm
-            formUser.ShowDialog(); // Open FormUser in modal mode
-            this.Show(); // Show MainForm again after FormUser is closed
+            this.Hide();
+            formUser.ShowDialog();
+            this.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             FormItem formItem = new FormItem();
-            this.Hide(); // Hide MainForm
-            formItem.ShowDialog(); // Open FormItem in modal mode
-            this.Show(); // Show MainForm again after FormItem is closed
+            this.Hide();
+            formItem.ShowDialog();
+            this.Show();
         }
 
         private void label2_Click(object sender, EventArgs e)
