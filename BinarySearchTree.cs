@@ -1,41 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace DSA_SuperMarket_Management_System
 {
-    public class TreeNode
+    public class TreeNode<T> where T : IComparable<T>
     {
-        public int Key;
-        public TreeNode? left;
-        public TreeNode? right;
+        public T Data;
+        public TreeNode<T>? left;
+        public TreeNode<T>? right;
 
-        public TreeNode(int key)
+        public TreeNode(T data)
         {
-            Key = key;
+            Data = data;
             left = null;
             right = null;
         }
     }
-    public class BinarySearchTree
+
+    public class BinarySearchTree<T> where T : IComparable<T>
     {
-        private TreeNode? root;
+        private TreeNode<T>? root;
 
-        public void InsertKey(int key)
+        public BinarySearchTree()
         {
-            root = InsertRecursively(key, root);
+            root = null;
         }
 
-       
-
-        public void Delete(int key)
+        public void InsertKey(T data)
         {
-            root = DeleteRecursively(root, key);
+            root = InsertRecursively(data, root);
         }
 
+        public void Delete(T data)
+        {
+            root = DeleteRecursively(root, data);
+        }
 
         public void PrintTree()
         {
@@ -55,110 +53,114 @@ namespace DSA_SuperMarket_Management_System
             Console.WriteLine();
         }
 
-        public BinarySearchTree()
+        // Recursively insert the node into the tree
+        private TreeNode<T> InsertRecursively(T data, TreeNode<T>? node)
         {
-            root = null;
+            if (node == null)
+            {
+                node = new TreeNode<T>(data);
+                return node;
+            }
+
+            if (data.CompareTo(node.Data) < 0)
+            {
+                node.left = InsertRecursively(data, node.left);
+            }
+            else if (data.CompareTo(node.Data) > 0)
+            {
+                node.right = InsertRecursively(data, node.right);
+            }
+
+            return node;
         }
 
-
-        private TreeNode InsertRecursively(int key, TreeNode? root)
+        // Recursively delete the node from the tree
+        private TreeNode<T>? DeleteRecursively(TreeNode<T>? node, T data)
         {
-            if (root == null)
+            if (node == null)
             {
-                root = new TreeNode(key);
-                return root;
+                return node;
             }
 
-            if (key < root.Key)
+            if (data.CompareTo(node.Data) < 0)
             {
-                root.left = InsertRecursively(key, root.left);
+                node.left = DeleteRecursively(node.left, data);
             }
-            else if (key > root.Key)
+            else if (data.CompareTo(node.Data) > 0)
             {
-                root.right = InsertRecursively(key, root.right);
-            }
-
-            return root;
-        }
-
-       
-
-        private TreeNode? DeleteRecursively(TreeNode? root, int key)
-        {
-            if (root == null)
-            {
-                return root;
-            }
-
-            if (key < root.Key)
-            {
-                root.left = DeleteRecursively(root.left, key);
-            }
-            else if (key > root.Key)
-            {
-                root.right = DeleteRecursively(root.right, key);
+                node.right = DeleteRecursively(node.right, data);
             }
             else
             {
-                if (root.right == null)
+                // Node to delete found
+
+                // Case 1: Node has no children
+                if (node.left == null && node.right == null)
                 {
-                    return root.left;
+                    return null;
                 }
-                if (root.left == null)
+                // Case 2: Node has only one child
+                else if (node.left == null)
                 {
-                    return root.right;
+                    return node.right;
                 }
-
-                root.Key = FindMinRecursively(root.right);
-                //root.Key = FindMinIteratively(root.right);
-                root.right = DeleteRecursively(root.right, root.Key);
+                else if (node.right == null)
+                {
+                    return node.left;
+                }
+                // Case 3: Node has two children
+                else
+                {
+                    // Find the minimum value in the right subtree
+                    node.Data = FindMinRecursively(node.right);
+                    // Delete the minimum node
+                    node.right = DeleteRecursively(node.right, node.Data);
+                }
             }
 
-            return root;
+            return node;
         }
 
-        private int FindMinRecursively(TreeNode? root)
+        // Find the minimum value in a subtree
+        private T FindMinRecursively(TreeNode<T>? node)
         {
-            if (root.left == null)
+            if (node.left == null)
             {
-                return root.Key;
+                return node.Data;
             }
-
-            return FindMinRecursively(root.left);
+            return FindMinRecursively(node.left);
         }
 
-        private void PrintInOrder(TreeNode? root)
+        // In-order traversal
+        private void PrintInOrder(TreeNode<T>? node)
         {
-            if (root != null)
+            if (node != null)
             {
-                PrintInOrder(root.left);
-                Console.Write(root.Key + " ");
-                PrintInOrder(root.right);
-                //PrintInOrder(root.right);
-                //Console.WriteLine(root.Key);
-                //PrintInOrder(root.left);
-            }
-
-        }
-
-        private void PrintPreOrder(TreeNode? root)
-        {
-            if (root != null)
-            {
-                Console.Write(root.Key + " ");
-                PrintPreOrder(root.left);
-                PrintPreOrder(root.right);
+                PrintInOrder(node.left);
+                Console.Write(node.Data + " ");
+                PrintInOrder(node.right);
             }
         }
 
-        private void PrintPostOrder(TreeNode? root)
+        // Pre-order traversal
+        private void PrintPreOrder(TreeNode<T>? node)
         {
-            if (root != null)
+            if (node != null)
             {
+                Console.Write(node.Data + " ");
+                PrintPreOrder(node.left);
+                PrintPreOrder(node.right);
+            }
+        }
 
-                PrintPostOrder(root.left);
-                PrintPostOrder(root.right);
-                Console.Write(root.Key + " ");
+        // Post-order traversal
+        private void PrintPostOrder(TreeNode<T>? node)
+        {
+            if (node != null)
+            {
+                PrintPostOrder(node.left);
+                PrintPostOrder(node.right);
+                Console.Write(node.Data + " ");
             }
         }
     }

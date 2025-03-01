@@ -1,35 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
-    public class DArray
+    public class DArray<T>
     {
-        private int[] data;
+        private T[] data;
         private int count;
         private int capacity;
 
         public DArray()
         {
             capacity = 4;
-            data = new int[capacity];
+            data = new T[capacity];
             count = 0;
         }
 
-        public void printData()
+        public void PrintData()
         {
             for (int i = 0; i < count; i++)
             {
                 Console.Write(data[i] + " ");
-
             }
             Console.WriteLine();
         }
 
-        public void Add(int item)
+        public void Add(T item)
         {
             if (capacity == count)
             {
@@ -38,13 +33,12 @@ namespace DSA_SuperMarket_Management_System
 
             data[count] = item;
             count++;
-
         }
 
-        public void ExpandArray()
+        private void ExpandArray()
         {
             capacity *= 2;
-            int[] newArray = new int[capacity];
+            T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
         }
@@ -67,14 +61,14 @@ namespace DSA_SuperMarket_Management_System
             // Check if shrinking is needed (when the array is 25% full)
             if (count > 0 && count <= capacity / 4)
             {
-                shrink();
+                Shrink();
             }
         }
 
-        public void shrink()
+        private void Shrink()
         {
             capacity = capacity / 2;
-            int[] newArray = new int[capacity];
+            T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
         }
