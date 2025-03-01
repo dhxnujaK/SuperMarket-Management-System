@@ -16,5 +16,10 @@ namespace DSA_SuperMarket_Management_System
         {
             InitializeComponent();
         }
+
+        private void FormUser_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
