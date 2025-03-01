@@ -13,15 +13,15 @@ namespace DSA_SuperMarket_Management_System
 {
     public partial class FormItem : Form
     {
-        private string connectionString = "Data Source=supermarket.db;Version=3;"; // SQLite database path
+        private string connectionString = "Data Source=supermarket.db;Version=3;"; 
 
         public FormItem()
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen; // ✅ Center form on start
+            this.StartPosition = FormStartPosition.CenterScreen; 
             CustomizeDataGridView();
-            CustomizeUI(); // ✅ Apply UI enhancements
-            LoadItemsToGrid(); // ✅ Load data when form starts
+            CustomizeUI(); 
+            LoadItemsToGrid();
         }
 
         // ✅ Improve DataGridView Styling
@@ -76,8 +76,8 @@ namespace DSA_SuperMarket_Management_System
                 using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, conn))
                 {
                     DataTable dt = new DataTable();
-                    adapter.Fill(dt); // ✅ Fill DataTable with data from the database
-                    dataGridView1.DataSource = dt; // ✅ Bind DataGridView to DataTable
+                    adapter.Fill(dt);
+                    dataGridView1.DataSource = dt; 
                     dataGridView1.Refresh(); // ✅ Ensure real-time update
                 }
             }
@@ -114,7 +114,7 @@ namespace DSA_SuperMarket_Management_System
 
             LoadItemsToGrid(); // ✅ Refresh DataGridView after adding an item
 
-            // ✅ Clear input fields after inserting data
+           
             textBox1.Clear();
             comboBox1.SelectedIndex = -1;
             textBox2.Clear();
@@ -124,12 +124,12 @@ namespace DSA_SuperMarket_Management_System
 
         private void FormItem_Load(object sender, EventArgs e)
         {
-            LoadItemsToGrid(); // ✅ Ensure data loads properly on form load
+            LoadItemsToGrid(); 
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // ✅ Placeholder for future interaction with DataGridView
+            
         }
 
         private void label1_Click(object sender, EventArgs e)
