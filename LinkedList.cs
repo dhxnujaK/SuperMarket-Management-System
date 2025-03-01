@@ -8,11 +8,10 @@ namespace DSA_SuperMarket_Management_System
 {
     public class Node
     {
-        public int Data { get; set; }
+        public User Data { get; set; }
         public Node? Next { get; set; }
-        public Node? previous { get; set; }
 
-        public Node(int data)
+        public Node(User data)
         {
             Data = data;
             Next = null;
@@ -23,91 +22,84 @@ namespace DSA_SuperMarket_Management_System
     {
         public Node? Head { get; set; }
         public Node? Tail { get; set; }
-        public int count { get; set; }
+        public int Count { get; private set; }
 
         public sLinkedList()
         {
             Head = null;
             Tail = null;
-            count = 0;
-
+            Count = 0;
         }
 
-        public void AddFront(int val)
+        public void AddFront(User user)
         {
-            Node temp = new Node(val);
+            Node temp = new Node(user);
 
             if (Head == null)
             {
                 Head = temp;
                 Tail = temp;
-                count++;
             }
-
             else
             {
                 temp.Next = Head;
                 Head = temp;
-                count++;
             }
+            Count++;
         }
 
-        public void addLast(int val)
+        public void AddLast(User user)
         {
-            Node temp = new Node(val);
+            Node temp = new Node(user);
 
-            if (Head == null) 
+            if (Head == null)
             {
                 Head = temp;
                 Tail = temp;
-                count++;
             }
             else
             {
-                Tail.Next = temp; 
-                Tail = temp; 
-                count++;
+                Tail.Next = temp;
+                Tail = temp;
             }
+            Count++;
         }
 
-        public void addAt(int index, int Data)
+        public void AddAt(int index, User user)
         {
-            Node newnode = new Node(Data);
-
-            if (index < 0 || index > count)
+            if (index < 0 || index > Count)
             {
                 Console.WriteLine("Invalid Index");
                 return;
             }
+
             if (index == 0)
             {
-                AddFront(Data);
-
+                AddFront(user);
             }
-            else if (index == count)
+            else if (index == Count)
             {
-                addLast(Data);
-
+                AddLast(user);
             }
             else
             {
+                Node newNode = new Node(user);
                 Node currentNode = Head;
 
                 for (int i = 0; i < index - 1; i++)
                 {
                     currentNode = currentNode.Next;
-
                 }
 
-
-                newnode.Next = currentNode.Next;
-                currentNode.Next = newnode;
-                count++;
+                newNode.Next = currentNode.Next;
+                currentNode.Next = newNode;
+                Count++;
             }
         }
-        public void Removeat(int index)
+
+        public void RemoveAt(int index)
         {
-            if (index < 0 || index >= count)
+            if (index < 0 || index >= Count)
             {
                 Console.WriteLine("Invalid Index");
                 return;
@@ -116,14 +108,12 @@ namespace DSA_SuperMarket_Management_System
             if (index == 0)
             {
                 Head = Head.Next;
-                count--;
+                Count--;
                 if (Head == null)
                 {
                     Tail = null;
                 }
             }
-
-           
             else
             {
                 Node currentNode = Head;
@@ -132,49 +122,42 @@ namespace DSA_SuperMarket_Management_System
                     currentNode = currentNode.Next;
                 }
 
-                Node NodetoDelete = currentNode.Next;
-                currentNode.Next = NodetoDelete.Next;
-                count--;
+                Node nodeToDelete = currentNode.Next;
+                currentNode.Next = nodeToDelete.Next;
+                Count--;
 
-                if (index == count)
+                if (index == Count)
                 {
                     Tail = currentNode;
                 }
-
-
             }
         }
 
-        public Node searchVal(int val)
+        public User? SearchById(int userId)
         {
             Node currentNode = Head;
-            int index = 0;
             while (currentNode != null)
             {
-                if (currentNode.Data == val)
+                if (currentNode.Data.Id == userId)
                 {
-                    Console.WriteLine("Value Found at index: " + index);
-                    Node nodecopy = new Node(currentNode.Data);
-                    return nodecopy;
+                    Console.WriteLine($"User Found: {currentNode.Data.Name} - {currentNode.Data.NIC} - {currentNode.Data.ContactNumber}");
+                    return currentNode.Data;
                 }
                 currentNode = currentNode.Next;
-                index++;
-
             }
-            Console.WriteLine("Value not found.");
+            Console.WriteLine("User not found.");
             return null;
         }
-        public void print()
+
+        public void PrintList()
         {
             Node current = Head;
 
             while (current != null)
             {
-                Console.WriteLine(current.Data);
+                Console.WriteLine($"ID: {current.Data.Id}, Name: {current.Data.Name}, NIC: {current.Data.NIC}, Contact: {current.Data.ContactNumber}");
                 current = current.Next;
-
             }
         }
     }
-
 }

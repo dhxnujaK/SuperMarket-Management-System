@@ -8,43 +8,41 @@ namespace DSA_SuperMarket_Management_System
 {
     public class DArray
     {
-        private int[] data;
+        private User[] data;
         private int count;
         private int capacity;
 
         public DArray()
         {
             capacity = 4;
-            data = new int[capacity];
+            data = new User[capacity];
             count = 0;
         }
 
-        public void printData()
+        public void PrintData()
         {
             for (int i = 0; i < count; i++)
             {
-                Console.Write(data[i] + " ");
-
+                Console.WriteLine($"ID: {data[i].Id}, Name: {data[i].Name}, NIC: {data[i].NIC}, Contact: {data[i].ContactNumber}");
             }
             Console.WriteLine();
         }
 
-        public void Add(int item)
+        public void Add(User user)
         {
             if (capacity == count)
             {
                 ExpandArray();
             }
 
-            data[count] = item;
+            data[count] = user;
             count++;
-
         }
 
-        public void ExpandArray()
+        private void ExpandArray()
         {
             capacity *= 2;
-            int[] newArray = new int[capacity];
+            User[] newArray = new User[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
         }
@@ -64,19 +62,32 @@ namespace DSA_SuperMarket_Management_System
 
             count--;
 
-            // Check if shrinking is needed (when the array is 25% full)
             if (count > 0 && count <= capacity / 4)
             {
-                shrink();
+                Shrink();
             }
         }
 
-        public void shrink()
+        private void Shrink()
         {
-            capacity = capacity / 2;
-            int[] newArray = new int[capacity];
+            capacity /= 2;
+            User[] newArray = new User[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
+        }
+
+        public User? SearchById(int userId)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (data[i].Id == userId)
+                {
+                    Console.WriteLine($"User Found: {data[i].Name} - {data[i].NIC} - {data[i].ContactNumber}");
+                    return data[i];
+                }
+            }
+            Console.WriteLine("User not found.");
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -10,15 +11,18 @@ namespace DSA_SuperMarket_Management_System
     public partial class FormUser : Form
     {
         private readonly string connectionString = "Data Source=UserDatabase.db;Version=3;";
+        private BinarySearchTree userBST = new BinarySearchTree();
+        private sLinkedList userList = new sLinkedList();
+        private DArray userArray = new DArray();
 
         public FormUser()
         {
             InitializeComponent();
-            this.StartPosition = FormStartPosition.CenterScreen; // ✅ Center form on start
-            CloseRunningInstances(); // Close any locked instances
+            this.StartPosition = FormStartPosition.CenterScreen;
+            CloseRunningInstances();
             InitializeDatabase();
-            CustomizeDataGridView(); // ✅ Enhance DataGridView UI
-            CustomizeUI(); // ✅ Improve button & input field styling
+            CustomizeDataGridView();
+            CustomizeUI();
             LoadUserData();
         }
 
@@ -30,7 +34,7 @@ namespace DSA_SuperMarket_Management_System
                 if (process.Id != Process.GetCurrentProcess().Id)
                 {
                     process.Kill();
-                    process.WaitForExit(); // Ensure process is completely stopped
+                    process.WaitForExit();
                 }
             }
         }
@@ -61,7 +65,54 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void button1_Click(object sender, EventArgs e) // Save Button
+        private void LoadUserData()
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                try
+                {
+                    connection.Open();
+                    string selectQuery = "SELECT Id, Name, NIC, ContactNumber FROM Users";
+
+                    using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(selectQuery, connection))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+
+                        if (dataGridView1 != null)
+                        {
+                            dataGridView1.DataSource = dataTable;
+                            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                            dataGridView1.AutoResizeColumns();
+                            dataGridView1.Refresh();
+                        }
+
+                        userBST = new BinarySearchTree();
+                        userList = new sLinkedList();
+                        userArray = new DArray();
+
+                        foreach (DataRow row in dataTable.Rows)
+                        {
+                            int id = Convert.ToInt32(row["Id"]);
+                            string name = row["Name"].ToString();
+                            string nic = row["NIC"].ToString();
+                            string contact = row["ContactNumber"].ToString();
+
+                            User user = new User(id, name, nic, contact);
+                            userBST.InsertUser(user);
+                            userList.AddLast(user);
+                            userArray.Add(user);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error Loading Data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
             string name = textBox1.Text.Trim();
             string nic = textBox2.Text.Trim();
@@ -85,7 +136,6 @@ namespace DSA_SuperMarket_Management_System
                 {
                     connection.Open();
 
-                    // Check if NIC already exists
                     string checkNICQuery = "SELECT COUNT(*) FROM Users WHERE NIC = @NIC";
                     using (SQLiteCommand checkCommand = new SQLiteCommand(checkNICQuery, connection))
                     {
@@ -99,7 +149,6 @@ namespace DSA_SuperMarket_Management_System
                         }
                     }
 
-                    // Insert new user
                     string insertQuery = "INSERT INTO Users (Name, NIC, ContactNumber) VALUES (@Name, @NIC, @ContactNumber)";
                     using (SQLiteCommand command = new SQLiteCommand(insertQuery, connection))
                     {
@@ -110,9 +159,9 @@ namespace DSA_SuperMarket_Management_System
                     }
 
                     MessageBox.Show("User saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    LoadUserData(); // ✅ Refresh DataGridView
 
-                    // ✅ Clear input fields
+                    LoadUserData();
+
                     textBox1.Clear();
                     textBox2.Clear();
                     textBox4.Clear();
@@ -131,42 +180,11 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void LoadUserData()
-        {
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-            {
-                try
-                {
-                    connection.Open();
-                    string selectQuery = "SELECT Id, Name, NIC, ContactNumber FROM Users";
-
-                    using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(selectQuery, connection))
-                    {
-                        DataTable dataTable = new DataTable();
-                        adapter.Fill(dataTable);
-
-                        if (dataGridView1 != null)
-                        {
-                            dataGridView1.DataSource = dataTable;
-                            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                            dataGridView1.AutoResizeColumns();
-                            dataGridView1.Refresh(); // ✅ Ensure real-time updates
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error Loading Data: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }
-        }
-
         private bool IsValidNIC(string nic)
         {
-            return nic.Length == 10 || nic.Length == 12; // Example NIC validation
+            return nic.Length == 10 || nic.Length == 12;
         }
 
-        // ✅ Improve DataGridView Styling
         private void CustomizeDataGridView()
         {
             dataGridView1.BorderStyle = BorderStyle.FixedSingle;
@@ -186,7 +204,6 @@ namespace DSA_SuperMarket_Management_System
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        // ✅ Improve UI Styling (Button & Input Fields)
         private void CustomizeUI()
         {
             button1.BackColor = Color.Navy;
@@ -208,29 +225,11 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-        private void FormUser_Load(object sender, EventArgs e)
-        {
-
-        }
+        private void textBox1_TextChanged(object sender, EventArgs e) { }
+        private void textBox2_TextChanged(object sender, EventArgs e) { }
+        private void textBox4_TextChanged(object sender, EventArgs e) { }
+        private void label1_Click(object sender, EventArgs e) { }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+        private void FormUser_Load(object sender, EventArgs e) { }
     }
 }
