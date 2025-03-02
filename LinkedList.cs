@@ -175,21 +175,25 @@ namespace DSA_SuperMarket_Management_System
         }
 
         // Update an item by its unique property (assume T has an "ItemCode" property)
-        public bool Update(string itemCode, T newItem)
+        public bool Update(string identifier, T newItem)
         {
             Node<T>? currentNode = Head;
             while (currentNode != null)
             {
                 dynamic item = currentNode.Data;  // Treat as dynamic to access properties
-                if (item.ItemCode == itemCode)
+
+                // Check if identifier matches either ItemCode (for Items) or NIC (for Users)
+                if ((item.ItemCode != null && item.ItemCode == identifier) ||
+                    (item.NIC != null && item.NIC == identifier))
                 {
-                    currentNode.Data = newItem; // Replace with new item
+                    currentNode.Data = newItem; // Replace with new item/user
                     return true;
                 }
                 currentNode = currentNode.Next;
             }
             return false;
         }
+
         public bool Remove(T item)
         {
             Node<T>? currentNode = Head;
