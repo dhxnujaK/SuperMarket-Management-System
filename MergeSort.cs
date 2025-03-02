@@ -1,88 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class MergeSort
     {
-        public void GetMergeSort(int[] array)
+        public void Sort<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            MergeSortAlgoritm(array);
-        }
-        private void MergeSortAlgoritm(int[] array)
-        {
-            if (array.Length <= 1)
-            {
+            if (list.Count <= 1)
                 return;
-            }
 
-            int arraySize = array.Length;
-            int mid = arraySize / 2;
-
-            int[] LeftSubArray = new int[mid];
-            int[] RightSubArray = new int[arraySize - mid];
-
-            copyArray(array, LeftSubArray, 0, mid);
-            copyArray(array, RightSubArray, mid, arraySize);
-
-            MergeSortAlgoritm(LeftSubArray);
-            MergeSortAlgoritm(RightSubArray);
-
-            Merge(LeftSubArray, RightSubArray, array);
-
-
+            List<T> sortedList = MergeSortAlgorithm(list, keySelector);
+            list.Clear();
+            list.AddRange(sortedList);
         }
 
-        private void Merge(int[] leftSubArray, int[] rightSubArray, int[] array)
+        private List<T> MergeSortAlgorithm<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            int LeftArraySize = leftSubArray.Length;
-            int RightArraySize = rightSubArray.Length;
+            if (list.Count <= 1)
+                return list;
 
-            int i = 0, j = 0, k = 0; // i = merged array j=leftarray k=rightarray
+            int mid = list.Count / 2;
 
-            while (j < LeftArraySize && k < RightArraySize)
+            List<T> leftList = list.GetRange(0, mid);
+            List<T> rightList = list.GetRange(mid, list.Count - mid);
+
+            leftList = MergeSortAlgorithm(leftList, keySelector);
+            rightList = MergeSortAlgorithm(rightList, keySelector);
+
+            return Merge(leftList, rightList, keySelector);
+        }
+
+        private List<T> Merge<T, TKey>(List<T> leftList, List<T> rightList, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
+        {
+            List<T> mergedList = new List<T>();
+            int i = 0, j = 0;
+
+            while (i < leftList.Count && j < rightList.Count)
             {
-                if (leftSubArray[j] <= rightSubArray[k])
+                if (keySelector(leftList[i]).CompareTo(keySelector(rightList[j])) <= 0)
                 {
-                    array[i] = leftSubArray[j];
+                    mergedList.Add(leftList[i]);
                     i++;
+                }
+                else
+                {
+                    mergedList.Add(rightList[j]);
                     j++;
                 }
-                else if (leftSubArray[j] > rightSubArray[k])
-                {
-                    array[i] = rightSubArray[k];
-                    i++;
-                    k++;
-                }
             }
 
-            while (j < LeftArraySize)
+            while (i < leftList.Count)
             {
-                array[i] = leftSubArray[j];
+                mergedList.Add(leftList[i]);
                 i++;
+            }
+
+            while (j < rightList.Count)
+            {
+                mergedList.Add(rightList[j]);
                 j++;
             }
 
-            // Copy remaining elements from the right array (if any)
-            while (k < RightArraySize)
-            {
-                array[i] = rightSubArray[k];
-                i++;
-                k++;
-            }
-        }
-
-        private void copyArray(int[] array, int[] newarray, int startingIndex, int endingIndex)
-        {
-            int j = 0;
-            for (int i = startingIndex; i < endingIndex; i++)
-            {
-                newarray[j] = array[i];
-                j++;
-            }
+            return mergedList;
         }
     }
 }

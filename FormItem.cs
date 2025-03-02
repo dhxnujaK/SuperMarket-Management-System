@@ -248,5 +248,10 @@ namespace DSA_SuperMarket_Management_System
             LoadItemsToDataStructures();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormItemSort formItemSort = new FormItemSort(itemBST, itemList, itemArray);
+            formItemSort.ShowDialog();
+        }
     }
 }

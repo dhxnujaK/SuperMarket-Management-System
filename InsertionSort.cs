@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class InsertionSort
     {
-        public void InsertionSortingAlgorithm(int[] array)
+        public void Sort<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            int arraySize = array.Length;
+            int n = list.Count;
 
-            for (int i = 1; i < arraySize; i++)
+            for (int i = 1; i < n; i++)
             {
-                int key = array[i];
+                T key = list[i];
                 int j = i - 1;
 
-                while (j >= 0 && array[j] > key)
+                while (j >= 0 && keySelector(list[j]).CompareTo(keySelector(key)) > 0)
                 {
-                    array[j + 1] = array[j];
+                    list[j + 1] = list[j];
                     j--;
                 }
-
-                array[j + 1] = key;
+                list[j + 1] = key;
             }
         }
     }

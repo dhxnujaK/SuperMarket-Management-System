@@ -1,34 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class BubbleSort
     {
-        public void BubbleSortAlgo(int[] array)
+        public void Sort<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            int arrayLen = array.Length;
-            bool Swapped = false;
-            int tmp;
+            int listLen = list.Count;
+            bool swapped;
 
-            for (int i = 0; i < arrayLen - 1; i++)
+            for (int i = 0; i < listLen - 1; i++)
             {
-                Swapped = false;
-                for (int j = 0; j < arrayLen - i - 1; j++)
+                swapped = false;
+                for (int j = 0; j < listLen - i - 1; j++)
                 {
-
-                    if (array[j] > array[j + 1])
+                    if (keySelector(list[j]).CompareTo(keySelector(list[j + 1])) > 0)
                     {
-                        tmp = array[j];
-                        array[j] = array[j + 1];
-                        array[j + 1] = tmp;
-                        Swapped = true;
+                        // Swap the elements
+                        T temp = list[j];
+                        list[j] = list[j + 1];
+                        list[j + 1] = temp;
+                        swapped = true;
                     }
                 }
-                if (!Swapped)
+                if (!swapped)
                 {
                     break;
                 }
