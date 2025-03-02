@@ -238,6 +238,7 @@ namespace DSA_SuperMarket_Management_System
         {
             FormUserEdit1 editForm = new FormUserEdit1(userList);
             editForm.ShowDialog();
+            LoadUserData();
         }
 
         private void FormUser_Load_1(object sender, EventArgs e)
