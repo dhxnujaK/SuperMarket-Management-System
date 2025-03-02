@@ -20,22 +20,25 @@ namespace DSA_SuperMarket_Management_System
             return string.Compare(this.ItemCode, other.ItemCode, StringComparison.OrdinalIgnoreCase);
         }
 
-        // Custom Sorting - Sort by any property dynamically
-        public static Comparison<Item> GetComparison(string columnName)
+        // Generic Sorting - Allows sorting by any property
+        public static Func<Item, IComparable> GetSortingKey(string columnName)
         {
             return columnName switch
             {
-                "Id" => (x, y) => x.Id.CompareTo(y.Id),
-                "Item Name" => (x, y) => string.Compare(x.ItemName, y.ItemName, StringComparison.OrdinalIgnoreCase),
-                "Item Code" => (x, y) => string.Compare(x.ItemCode, y.ItemCode, StringComparison.OrdinalIgnoreCase),
-                "Quantity" => (x, y) => x.Quantity.CompareTo(y.Quantity),
-                "Expiry Date" => (x, y) => DateTime.Parse(x.ExpiryDate).CompareTo(DateTime.Parse(y.ExpiryDate)),
-                "Manufacture Date" => (x, y) => DateTime.Parse(x.ManufactureDate).CompareTo(DateTime.Parse(y.ManufactureDate)),
-                "Gross Amount" => (x, y) => x.GrossAmount.CompareTo(y.GrossAmount),
-                "Net Amount" => (x, y) => x.NetAmount.CompareTo(y.NetAmount),
-                _ => (x, y) => 0 // Default to no sorting if invalid column
+                "Id" => item => item.Id,  // int implements IComparable
+                "Item Name" => item => item.ItemName,  // string implements IComparable
+                "Item Code" => item => item.ItemCode,  // string implements IComparable
+                "Category" => item => item.Category,  // string implements IComparable
+                "Quantity" => item => item.Quantity,  // int implements IComparable
+                "Expiry Date" => item => DateTime.Parse(item.ExpiryDate),  // DateTime implements IComparable
+                "Manufacture Date" => item => DateTime.Parse(item.ManufactureDate),  // DateTime implements IComparable
+                "Gross Amount" => item => item.GrossAmount,  // double implements IComparable
+                "Net Amount" => item => item.NetAmount,  // double implements IComparable
+                _ => item => item.ItemCode // Default sorting by Item Code
             };
         }
+
+
 
         public override string ToString()
         {

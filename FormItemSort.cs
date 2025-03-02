@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SQLite;
+using System.Linq;
 using System.Windows.Forms;
+using Guna.UI2.WinForms;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -11,142 +14,217 @@ namespace DSA_SuperMarket_Management_System
         private sLinkedList<Item> itemList;
         private DArray<Item> itemArray;
         private string connectionString = "Data Source=supermarket.db;Version=3;";
+        private ComboBox comboBoxSortAlgorithm = new ComboBox();
+        private ComboBox comboBoxSortColumn = new ComboBox();
 
         public FormItemSort(BinarySearchTree<Item> bst, sLinkedList<Item> list, DArray<Item> array)
         {
             InitializeComponent();
-            this.itemBST = bst;
-            this.itemList = list;
-            this.itemArray = array;
+            itemBST = bst;
+            itemList = list;
+            itemArray = array;
 
-            LoadSortingAlgorithms();
-            LoadColumnNames();
-        }
+            // Populate Sorting Algorithms
+            comboBox1.Items.Add("QuickSort");
+            comboBox1.Items.Add("MergeSort");
+            comboBox1.Items.Add("InsertionSort");
+            comboBox1.Items.Add("SelectionSort");
+            comboBox1.Items.Add("BubbleSort");
 
-        private void FormItemSort_Load(object sender, EventArgs e)
-        {
-            comboBox1.SelectedIndex = 0;
-            comboBox2.SelectedIndex = 0;
-        }
-
-        private void LoadSortingAlgorithms()
-        {
-            comboBox1.Items.Add("Bubble Sort");
-            comboBox1.Items.Add("Insertion Sort");
-            comboBox1.Items.Add("Merge Sort");
-            comboBox1.Items.Add("Quick Sort");
-            comboBox1.Items.Add("Selection Sort");
-        }
-
-        private void LoadColumnNames()
-        {
-            comboBox2.Items.Add("Id");
-            comboBox2.Items.Add("Item Name");
-            comboBox2.Items.Add("Item Code");
+            // Populate Column Names
+            comboBox2.Items.Add("ItemName");
+            comboBox2.Items.Add("ItemCode");
+            comboBox2.Items.Add("Category");
+            comboBox2.Items.Add("ExpiryDate");
+            comboBox2.Items.Add("ManufactureDate");
+            comboBox2.Items.Add("GrossAmount");
+            comboBox2.Items.Add("NetAmount");
             comboBox2.Items.Add("Quantity");
-            comboBox2.Items.Add("Expiry Date");
-            comboBox2.Items.Add("Manufacture Date");
-            comboBox2.Items.Add("Gross Amount");
-            comboBox2.Items.Add("Net Amount");
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selectedAlgorithm = comboBox1.SelectedItem?.ToString();
-            Console.WriteLine($"Selected Sorting Algorithm: {selectedAlgorithm}");
-        }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string selectedColumn = comboBox2.SelectedItem?.ToString();
-            Console.WriteLine($"Selected Sorting Column: {selectedColumn}");
-        }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (comboBox1.SelectedItem == null || comboBox2.SelectedItem == null)
             {
-                MessageBox.Show("Please select both a sorting algorithm and a column to sort by.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please select a sorting algorithm and column.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             string selectedAlgorithm = comboBox1.SelectedItem.ToString();
             string selectedColumn = comboBox2.SelectedItem.ToString();
 
-            SortDataStructures(selectedAlgorithm, selectedColumn);
-            UpdateDatabase();
+            // Get data from LinkedList (or another structure)
+            List<Item> items = new List<Item>();
+            Node<Item> current = itemList.Head;
+            while (current != null)
+            {
+                items.Add(current.Data);
+                current = current.Next;
+            }
 
-            MessageBox.Show($"Sorted using {selectedAlgorithm} by {selectedColumn} and database updated.",
-                            "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            // Perform Sorting
+            SortItems(items, selectedAlgorithm, selectedColumn);
 
+            // Update Data Structures and Database
+            UpdateDataStructures(items);
+            UpdateDatabase(items);
+
+            MessageBox.Show("Items sorted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
-        private void SortDataStructures(string algorithm, string selectedColumn)
+        private void SortWithKey<TValue>(List<Item> items, string algorithm, Func<Item, TValue> keySelector) where TValue : IComparable<TValue>
         {
-            List<Item> sortedList = ConvertToList(itemList);
+            switch (algorithm)
+            {
+                case "QuickSort":
+                    new QuickSort().Sort(items, keySelector);
+                    break;
+                case "MergeSort":
+                    new MergeSort().Sort(items, keySelector);
+                    break;
+                case "InsertionSort":
+                    new InsertionSort().Sort(items, keySelector);
+                    break;
+                case "SelectionSort":
+                    new SelectionSort().Sort(items, keySelector);
+                    break;
+                case "BubbleSort":
+                    new BubbleSort().Sort(items, keySelector);
+                    break;
+            }
+        }
 
-            Comparison<Item> comparison = Item.GetComparison(selectedColumn);
+        private void SortItems(List<Item> items, string algorithm, string column)
+        {
+            // Get the correct sorting key type dynamically
+            switch (column)
+            {
+                case "Id":
+                    SortWithKey(items, algorithm, item => item.Id);
+                    break;
+                case "Item Name":
+                    SortWithKey(items, algorithm, item => item.ItemName);
+                    break;
+                case "Item Code":
+                    SortWithKey(items, algorithm, item => item.ItemCode);
+                    break;
+                case "Category":
+                    SortWithKey(items, algorithm, item => item.Category);
+                    break;
+                case "Quantity":
+                    SortWithKey(items, algorithm, item => item.Quantity);
+                    break;
+                case "Expiry Date":
+                    SortWithKey(items, algorithm, item => DateTime.Parse(item.ExpiryDate));
+                    break;
+                case "Manufacture Date":
+                    SortWithKey(items, algorithm, item => DateTime.Parse(item.ManufactureDate));
+                    break;
+                case "Gross Amount":
+                    SortWithKey(items, algorithm, item => item.GrossAmount);
+                    break;
+                case "Net Amount":
+                    SortWithKey(items, algorithm, item => item.NetAmount);
+                    break;
+                default:
+                    MessageBox.Show("Invalid column selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+            }
+        }
 
-            sortedList.Sort(comparison);
 
-            itemList = new sLinkedList<Item>();
+
+
+        private IComparable GetColumnValue(Item item, string column)
+        {
+            return column switch
+            {
+                "ItemName" => item.ItemName,
+                "ItemCode" => item.ItemCode,
+                "Category" => item.Category,
+                "ExpiryDate" => DateTime.Parse(item.ExpiryDate),
+                "ManufactureDate" => DateTime.Parse(item.ManufactureDate),
+                "GrossAmount" => item.GrossAmount,
+                "NetAmount" => item.NetAmount,
+                "Quantity" => item.Quantity,
+                _ => throw new ArgumentException("Invalid column")
+            };
+        }
+
+        private void FormItemSort_Load(object sender, EventArgs e)
+        {
+            // Initialize sorting options and column options when form loads
+            comboBox1.Items.Clear();
+            comboBox1.Items.AddRange(new string[] { "QuickSort", "MergeSort", "InsertionSort", "SelectionSort", "BubbleSort" });
+
+            comboBox2.Items.Clear();
+            comboBox2.Items.AddRange(new string[] { "Item Name", "Item Code", "Category", "Expiry Date", "Manufacture Date", "Gross Amount", "Net Amount", "Quantity" });
+
+            comboBox1.SelectedIndex = 0; // Default selection
+            comboBox2.SelectedIndex = 0; // Default selection
+        }
+
+        private void UpdateDataStructures(List<Item> sortedItems)
+        {
             itemBST = new BinarySearchTree<Item>();
+            itemList = new sLinkedList<Item>();
             itemArray = new DArray<Item>();
 
-            foreach (var item in sortedList)
+            foreach (var item in sortedItems)
             {
-                itemList.AddLast(item);
                 itemBST.InsertKey(item);
+                itemList.AddLast(item);
                 itemArray.Add(item);
             }
         }
 
-        private List<Item> ConvertToList(sLinkedList<Item> linkedList)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            List<Item> list = new List<Item>();
-            Node<Item>? current = linkedList.Head;
-            while (current != null)
-            {
-                list.Add(current.Data);
-                current = current.Next;
-            }
-            return list;
+
         }
 
-        private void UpdateDatabase()
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void UpdateDatabase(List<Item> sortedItems)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-
-                string deleteQuery = "DELETE FROM Items";
-                using (SQLiteCommand deleteCmd = new SQLiteCommand(deleteQuery, conn))
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
-                    deleteCmd.ExecuteNonQuery();
-                }
-
-                foreach (var item in ConvertToList(itemList))
-                {
-                    string insertQuery = "INSERT INTO Items (Id, ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) " +
-                                         "VALUES (@Id, @ItemName, @ItemCode, @Category, @ExpiryDate, @ManufactureDate, @GrossAmount, @NetAmount, @Quantity)";
+                    string insertQuery = "INSERT OR REPLACE INTO Items (ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) " +
+                                         "VALUES (@name, @code, @category, @expiry, @manufacture, @gross, @net, @quantity)";
 
                     using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
                     {
-                        insertCmd.Parameters.AddWithValue("@Id", item.Id);
-                        insertCmd.Parameters.AddWithValue("@ItemName", item.ItemName);
-                        insertCmd.Parameters.AddWithValue("@ItemCode", item.ItemCode);
-                        insertCmd.Parameters.AddWithValue("@Category", item.Category);
-                        insertCmd.Parameters.AddWithValue("@ExpiryDate", item.ExpiryDate);
-                        insertCmd.Parameters.AddWithValue("@ManufactureDate", item.ManufactureDate);
-                        insertCmd.Parameters.AddWithValue("@GrossAmount", item.GrossAmount);
-                        insertCmd.Parameters.AddWithValue("@NetAmount", item.NetAmount);
-                        insertCmd.Parameters.AddWithValue("@Quantity", item.Quantity);
+                        foreach (var item in sortedItems)
+                        {
+                            insertCmd.Parameters.Clear();
+                            insertCmd.Parameters.AddWithValue("@name", item.ItemName);
+                            insertCmd.Parameters.AddWithValue("@code", item.ItemCode); // Ensure UNIQUE constraint is respected
+                            insertCmd.Parameters.AddWithValue("@category", item.Category);
+                            insertCmd.Parameters.AddWithValue("@expiry", item.ExpiryDate);
+                            insertCmd.Parameters.AddWithValue("@manufacture", item.ManufactureDate);
+                            insertCmd.Parameters.AddWithValue("@gross", item.GrossAmount);
+                            insertCmd.Parameters.AddWithValue("@net", item.NetAmount);
+                            insertCmd.Parameters.AddWithValue("@quantity", item.Quantity);
 
-                        insertCmd.ExecuteNonQuery();
+                            insertCmd.ExecuteNonQuery();
+                        }
                     }
+
+                    transaction.Commit();
                 }
             }
         }
+
+
     }
 }

@@ -252,6 +252,8 @@ namespace DSA_SuperMarket_Management_System
         {
             FormItemSort formItemSort = new FormItemSort(itemBST, itemList, itemArray);
             formItemSort.ShowDialog();
+            LoadItemsToGrid();
+            LoadItemsToDataStructures();
         }
     }
 }
