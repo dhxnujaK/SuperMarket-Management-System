@@ -118,8 +118,8 @@ namespace DSA_SuperMarket_Management_System
         private void button1_Click(object sender, EventArgs e)
         {
             string name = textBox1.Text.Trim();
-            string nic = textBox2.Text.Trim();
-            string contactNumber = textBox4.Text.Trim();
+            string nic = textBox4.Text.Trim();
+            string contactNumber = textBox2.Text.Trim();
 
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(nic) || string.IsNullOrWhiteSpace(contactNumber))
             {
