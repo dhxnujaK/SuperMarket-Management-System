@@ -7,7 +7,7 @@ namespace DSA_SuperMarket_Management_System
     public partial class FormUserEdit1 : Form
     {
         private sLinkedList<User> userList;
-        private string connectionString = "Data Source=supermarket.db;Version=3;";
+        private string connectionString = "Data Source=UserDatabase.db;Version=3;";
         private User currentUser;
 
         public FormUserEdit1()
@@ -62,7 +62,7 @@ namespace DSA_SuperMarket_Management_System
             }
 
             User updatedUser = new User(currentUser.Id, name, currentUser.NIC, contactNumber);
-            userList.Update(currentUser.NIC, updatedUser);
+            userList.Update(user => user.NIC == currentUser.NIC, updatedUser); // Using new Update method
             UpdateDatabase(updatedUser);
             
 
@@ -122,7 +122,8 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-       
+        
+
         private void button4_Click(object sender, EventArgs e)
         {
             this.Close();
