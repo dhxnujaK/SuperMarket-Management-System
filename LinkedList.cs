@@ -6,23 +6,25 @@ using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
-    public class Node
+    public class Node<T> // Generic Node class
     {
-        public User Data { get; set; }
-        public Node? Next { get; set; }
+        public T Data { get; set; }  // Change data type to T
+        public Node<T>? Next { get; set; }
+        public Node<T>? Previous { get; set; }
 
-        public Node(User data)
+        public Node(T data)
         {
             Data = data;
             Next = null;
+            Previous = null;
         }
     }
 
-    public class sLinkedList
+    public class sLinkedList<T> // Generic Linked List class
     {
-        public Node? Head { get; set; }
-        public Node? Tail { get; set; }
-        public int Count { get; private set; }
+        public Node<T>? Head { get; set; }
+        public Node<T>? Tail { get; set; }
+        public int Count { get; set; }
 
         public sLinkedList()
         {
@@ -31,41 +33,48 @@ namespace DSA_SuperMarket_Management_System
             Count = 0;
         }
 
-        public void AddFront(User user)
+        // Add a new node at the front of the list
+        public void AddFront(T val)
         {
-            Node temp = new Node(user);
+            Node<T> temp = new Node<T>(val);
 
             if (Head == null)
             {
                 Head = temp;
                 Tail = temp;
+                Count++;
             }
             else
             {
                 temp.Next = Head;
+                Head.Previous = temp; // Set previous link
                 Head = temp;
+                Count++;
             }
-            Count++;
         }
 
-        public void AddLast(User user)
+        // Add a new node at the end of the list
+        public void AddLast(T val) // Method name should start with uppercase "AddLast"
         {
-            Node temp = new Node(user);
+            Node<T> temp = new Node<T>(val);
 
             if (Head == null)
             {
                 Head = temp;
                 Tail = temp;
+                Count++;
             }
             else
             {
                 Tail.Next = temp;
+                temp.Previous = Tail; // Set previous link
                 Tail = temp;
+                Count++;
             }
-            Count++;
         }
 
-        public void AddAt(int index, User user)
+        // Add a node at a specific index
+        public void AddAt(int index, T data)
         {
             if (index < 0 || index > Count)
             {
@@ -73,30 +82,35 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
+            Node<T> newNode = new Node<T>(data);
+
             if (index == 0)
             {
-                AddFront(user);
+                AddFront(data);
             }
             else if (index == Count)
             {
-                AddLast(user);
+                AddLast(data);
             }
             else
             {
-                Node newNode = new Node(user);
-                Node currentNode = Head;
-
+                Node<T> currentNode = Head;
                 for (int i = 0; i < index - 1; i++)
                 {
                     currentNode = currentNode.Next;
                 }
 
                 newNode.Next = currentNode.Next;
+                if (currentNode.Next != null)
+                    currentNode.Next.Previous = newNode; // Set previous of next node
                 currentNode.Next = newNode;
+                newNode.Previous = currentNode; // Set previous of new node
+
                 Count++;
             }
         }
 
+        // Remove a node at a specific index
         public void RemoveAt(int index)
         {
             if (index < 0 || index >= Count)
@@ -108,6 +122,8 @@ namespace DSA_SuperMarket_Management_System
             if (index == 0)
             {
                 Head = Head.Next;
+                if (Head != null)
+                    Head.Previous = null; // If there is a head, update its previous pointer
                 Count--;
                 if (Head == null)
                 {
@@ -116,46 +132,54 @@ namespace DSA_SuperMarket_Management_System
             }
             else
             {
-                Node currentNode = Head;
+                Node<T> currentNode = Head;
                 for (int i = 0; i < index - 1; i++)
                 {
                     currentNode = currentNode.Next;
                 }
 
-                Node nodeToDelete = currentNode.Next;
+                Node<T> nodeToDelete = currentNode.Next;
                 currentNode.Next = nodeToDelete.Next;
-                Count--;
+                if (nodeToDelete.Next != null)
+                    nodeToDelete.Next.Previous = currentNode; // Update next node's previous pointer
 
-                if (index == Count)
+                Count--;
+                if (currentNode.Next == null)
                 {
-                    Tail = currentNode;
+                    Tail = currentNode; // If removed node is the last, update the tail
                 }
             }
         }
 
-        public User? SearchById(int userId)
+        // Search for a value in the list
+        public Node<T>? SearchVal(T val)
         {
-            Node currentNode = Head;
+            Node<T>? currentNode = Head;
+            int index = 0;
+
             while (currentNode != null)
             {
-                if (currentNode.Data.Id == userId)
+                if (EqualityComparer<T>.Default.Equals(currentNode.Data, val))
                 {
-                    Console.WriteLine($"User Found: {currentNode.Data.Name} - {currentNode.Data.NIC} - {currentNode.Data.ContactNumber}");
-                    return currentNode.Data;
+                    Console.WriteLine("Value Found at index: " + index);
+                    return currentNode;
                 }
                 currentNode = currentNode.Next;
+                index++;
             }
-            Console.WriteLine("User not found.");
+
+            Console.WriteLine("Value not found.");
             return null;
         }
 
-        public void PrintList()
+        // Print all elements of the linked list
+        public void Print()
         {
-            Node current = Head;
+            Node<T> current = Head;
 
             while (current != null)
             {
-                Console.WriteLine($"ID: {current.Data.Id}, Name: {current.Data.Name}, NIC: {current.Data.NIC}, Contact: {current.Data.ContactNumber}");
+                Console.WriteLine(current.Data);
                 current = current.Next;
             }
         }
