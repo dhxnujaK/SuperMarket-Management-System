@@ -147,7 +147,8 @@ namespace DSA_SuperMarket_Management_System
             };
 
             itemBST.Delete(currentItem);
-            itemList.Update(itemCode, updatedItem);
+            itemList.Update(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase), updatedItem);
+
 
             int index = itemArray.Find(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase));
             if (index != -1)
@@ -207,7 +208,8 @@ namespace DSA_SuperMarket_Management_System
             {
                 // Delete from data structures
                 itemBST.Delete(currentItem);
-                itemList.Remove(currentItem);
+                itemList.Remove(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
+
 
                 int index = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
                 if (index != -1)

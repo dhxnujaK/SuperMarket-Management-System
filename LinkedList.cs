@@ -173,20 +173,14 @@ namespace DSA_SuperMarket_Management_System
             }
             return default;
         }
-
-        // Update an item by its unique property (assume T has an "ItemCode" property)
-        public bool Update(string identifier, T newItem)
+        public bool Update(Func<T, bool> predicate, T newItem)
         {
             Node<T>? currentNode = Head;
             while (currentNode != null)
             {
-                dynamic item = currentNode.Data;  // Treat as dynamic to access properties
-
-                // Check if identifier matches either ItemCode (for Items) or NIC (for Users)
-                if ((item.ItemCode != null && item.ItemCode == identifier) ||
-                    (item.NIC != null && item.NIC == identifier))
+                if (predicate(currentNode.Data))
                 {
-                    currentNode.Data = newItem; // Replace with new item/user
+                    currentNode.Data = newItem;
                     return true;
                 }
                 currentNode = currentNode.Next;
@@ -194,12 +188,14 @@ namespace DSA_SuperMarket_Management_System
             return false;
         }
 
-        public bool Remove(T item)
+
+
+        public bool Remove(Func<T, bool> predicate)
         {
             Node<T>? currentNode = Head;
             while (currentNode != null)
             {
-                if (EqualityComparer<T>.Default.Equals(currentNode.Data, item))
+                if (predicate(currentNode.Data)) // Use predicate to match item
                 {
                     if (currentNode.Previous != null)
                     {
