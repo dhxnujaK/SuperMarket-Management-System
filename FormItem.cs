@@ -204,5 +204,12 @@ namespace DSA_SuperMarket_Management_System
         private void textBox1_TextChanged(object sender, EventArgs e) { }
         private void label8_Click(object sender, EventArgs e) { }
         private void textBox5_TextChanged(object sender, EventArgs e) { }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            FormItemEdit formItemEdit = new FormItemEdit(itemBST, itemList, itemArray);
+            formItemEdit.ShowDialog();
+        }
+
     }
 }

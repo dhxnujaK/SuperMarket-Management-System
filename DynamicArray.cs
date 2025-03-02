@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -8,6 +9,9 @@ namespace DSA_SuperMarket_Management_System
         private int count;
         private int capacity;
 
+        public int Count => count;
+        public int Capacity => capacity;
+
         public DArray()
         {
             capacity = 4;
@@ -15,15 +19,18 @@ namespace DSA_SuperMarket_Management_System
             count = 0;
         }
 
+        // Print all items in the array
         public void PrintData()
         {
-            for (int i = 0; i < count; i++)
+            if (count == 0)
             {
-                Console.Write(data[i] + " ");
+                Console.WriteLine("Array is empty.");
+                return;
             }
-            Console.WriteLine();
+            Console.WriteLine("Array Elements: " + string.Join(", ", data.Take(count)));
         }
 
+        // Add a new item
         public void Add(T item)
         {
             if (capacity == count)
@@ -35,6 +42,7 @@ namespace DSA_SuperMarket_Management_System
             count++;
         }
 
+        // Expand array when full
         private void ExpandArray()
         {
             capacity *= 2;
@@ -43,6 +51,7 @@ namespace DSA_SuperMarket_Management_System
             data = newArray;
         }
 
+        // Remove an item at a specific index
         public void RemoveAt(int index)
         {
             if (index < 0 || index >= count)
@@ -65,12 +74,68 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
+        // Shrink the array to optimize memory usage
         private void Shrink()
         {
-            capacity = capacity / 2;
+            capacity = Math.Max(4, capacity / 2); // Prevent capacity from going below 4
             T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
+        }
+
+        // Get item at a specific index
+        public T GetAt(int index)
+        {
+            if (index < 0 || index >= count)
+            {
+                throw new IndexOutOfRangeException("Invalid index");
+            }
+            return data[index];
+        }
+
+        // Find an item (returns index, -1 if not found)
+        // Find the index of an item based on a condition (predicate)
+        public int Find(Func<T, bool> predicate)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (predicate(data[i]))
+                {
+                    return i;  // ✅ Return the index if found
+                }
+            }
+            return -1;  
+        }
+
+
+
+        /*// Check if an item exists
+        public bool Contains(T item)
+        {
+            return Find(item) != -1;
+        }*/
+
+        // Update an existing item at a given index
+        public bool Update(int index, T newItem)
+        {
+            if (index < 0 || index >= count)
+            {
+                Console.WriteLine("Invalid index");
+                return false;
+            }
+            data[index] = newItem;
+            return true;
+        }
+        public T? SearchItem(Func<T, bool> predicate)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                if (predicate(data[i]))
+                {
+                    return data[i];
+                }
+            }
+            return default;
         }
     }
 }

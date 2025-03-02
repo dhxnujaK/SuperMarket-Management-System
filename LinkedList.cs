@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class Node<T> // Generic Node class
     {
-        public T Data { get; set; }  // Change data type to T
+        public T Data { get; set; }
         public Node<T>? Next { get; set; }
         public Node<T>? Previous { get; set; }
 
@@ -22,9 +19,9 @@ namespace DSA_SuperMarket_Management_System
 
     public class sLinkedList<T> // Generic Linked List class
     {
-        public Node<T>? Head { get; set; }
-        public Node<T>? Tail { get; set; }
-        public int Count { get; set; }
+        public Node<T>? Head { get; private set; }
+        public Node<T>? Tail { get; private set; }
+        public int Count { get; private set; }
 
         public sLinkedList()
         {
@@ -42,19 +39,19 @@ namespace DSA_SuperMarket_Management_System
             {
                 Head = temp;
                 Tail = temp;
-                Count++;
             }
             else
             {
                 temp.Next = Head;
-                Head.Previous = temp; // Set previous link
+                Head.Previous = temp;
                 Head = temp;
-                Count++;
             }
+
+            Count++;
         }
 
         // Add a new node at the end of the list
-        public void AddLast(T val) // Method name should start with uppercase "AddLast"
+        public void AddLast(T val)
         {
             Node<T> temp = new Node<T>(val);
 
@@ -62,15 +59,15 @@ namespace DSA_SuperMarket_Management_System
             {
                 Head = temp;
                 Tail = temp;
-                Count++;
             }
             else
             {
                 Tail.Next = temp;
-                temp.Previous = Tail; // Set previous link
+                temp.Previous = Tail;
                 Tail = temp;
-                Count++;
             }
+
+            Count++;
         }
 
         // Add a node at a specific index
@@ -82,38 +79,38 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            Node<T> newNode = new Node<T>(data);
-
             if (index == 0)
             {
                 AddFront(data);
+                return;
             }
-            else if (index == Count)
+            if (index == Count)
             {
                 AddLast(data);
+                return;
             }
-            else
+
+            Node<T> newNode = new Node<T>(data);
+            Node<T> currentNode = Head;
+
+            for (int i = 0; i < index - 1; i++)
             {
-                Node<T> currentNode = Head;
-                for (int i = 0; i < index - 1; i++)
-                {
-                    currentNode = currentNode.Next;
-                }
-
-                newNode.Next = currentNode.Next;
-                if (currentNode.Next != null)
-                    currentNode.Next.Previous = newNode; // Set previous of next node
-                currentNode.Next = newNode;
-                newNode.Previous = currentNode; // Set previous of new node
-
-                Count++;
+                currentNode = currentNode.Next;
             }
+
+            newNode.Next = currentNode.Next;
+            if (currentNode.Next != null)
+                currentNode.Next.Previous = newNode;
+
+            currentNode.Next = newNode;
+            newNode.Previous = currentNode;
+            Count++;
         }
 
         // Remove a node at a specific index
         public void RemoveAt(int index)
         {
-            if (index < 0 || index >= Count)
+            if (index < 0 || index >= Count || Head == null)
             {
                 Console.WriteLine("Invalid Index");
                 return;
@@ -123,16 +120,14 @@ namespace DSA_SuperMarket_Management_System
             {
                 Head = Head.Next;
                 if (Head != null)
-                    Head.Previous = null; // If there is a head, update its previous pointer
-                Count--;
-                if (Head == null)
-                {
-                    Tail = null;
-                }
+                    Head.Previous = null;
+                else
+                    Tail = null;  // List is now empty
             }
             else
             {
                 Node<T> currentNode = Head;
+
                 for (int i = 0; i < index - 1; i++)
                 {
                     currentNode = currentNode.Next;
@@ -140,43 +135,67 @@ namespace DSA_SuperMarket_Management_System
 
                 Node<T> nodeToDelete = currentNode.Next;
                 currentNode.Next = nodeToDelete.Next;
-                if (nodeToDelete.Next != null)
-                    nodeToDelete.Next.Previous = currentNode; // Update next node's previous pointer
 
-                Count--;
-                if (currentNode.Next == null)
-                {
-                    Tail = currentNode; // If removed node is the last, update the tail
-                }
+                if (nodeToDelete.Next != null)
+                    nodeToDelete.Next.Previous = currentNode;
+                else
+                    Tail = currentNode;  // If last node was removed, update Tail
             }
+
+            Count--;
         }
 
         // Search for a value in the list
         public Node<T>? SearchVal(T val)
         {
             Node<T>? currentNode = Head;
-            int index = 0;
-
             while (currentNode != null)
             {
                 if (EqualityComparer<T>.Default.Equals(currentNode.Data, val))
-                {
-                    Console.WriteLine("Value Found at index: " + index);
                     return currentNode;
-                }
                 currentNode = currentNode.Next;
-                index++;
             }
-
-            Console.WriteLine("Value not found.");
             return null;
         }
+
+
+        // Find item in Linked List (returns the actual data instead of Node)
+        public T? Find(Func<T, bool> predicate)
+        {
+            Node<T>? currentNode = Head;
+            while (currentNode != null)
+            {
+                if (predicate(currentNode.Data))
+                {
+                    return currentNode.Data;
+                }
+                currentNode = currentNode.Next;
+            }
+            return default;
+        }
+
+        // Update an item by its unique property (assume T has an "ItemCode" property)
+        public bool Update(string itemCode, T newItem)
+        {
+            Node<T>? currentNode = Head;
+            while (currentNode != null)
+            {
+                dynamic item = currentNode.Data;  // Treat as dynamic to access properties
+                if (item.ItemCode == itemCode)
+                {
+                    currentNode.Data = newItem; // Replace with new item
+                    return true;
+                }
+                currentNode = currentNode.Next;
+            }
+            return false;
+        }
+
 
         // Print all elements of the linked list
         public void Print()
         {
-            Node<T> current = Head;
-
+            Node<T>? current = Head;
             while (current != null)
             {
                 Console.WriteLine(current.Data);

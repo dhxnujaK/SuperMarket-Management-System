@@ -130,7 +130,24 @@ namespace DSA_SuperMarket_Management_System
             }
             return FindMinRecursively(node.left);
         }
+        public TreeNode<T>? Search(string itemCode)
+        {
+            return SearchRecursively(root, itemCode);
+        }
 
+        private TreeNode<T>? SearchRecursively(TreeNode<T>? node, string itemCode)
+        {
+            if (node == null) return null;
+
+            dynamic item = node.Data;
+            if (item.ItemCode == itemCode)
+                return node;
+
+            if (string.Compare(item.ItemCode, itemCode) > 0)
+                return SearchRecursively(node.left, itemCode);
+            else
+                return SearchRecursively(node.right, itemCode);
+        }
         // In-order traversal
         private void PrintInOrder(TreeNode<T>? node)
         {
