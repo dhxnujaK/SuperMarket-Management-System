@@ -241,9 +241,18 @@ namespace DSA_SuperMarket_Management_System
             LoadUserData();
         }
 
+
+
         private void FormUser_Load_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FormUserSort editForm = new FormUserSort(userList);
+            editForm.ShowDialog();
+            LoadUserData();
         }
     }
 }
