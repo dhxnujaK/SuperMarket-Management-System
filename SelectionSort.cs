@@ -1,27 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class SelectionSort
     {
-        public void GetSelectionSort(int[] array)
+        public void Sort<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            SelectionSortAlgo(array);
-        }
-        private void SelectionSortAlgo(int[] array)
-        {
+            int n = list.Count;
 
-
-            for (int i = 0; i < array.Length; i++)
+            for (int i = 0; i < n - 1; i++)
             {
                 int minIndex = i;
-                for (int j = i + 1; j < array.Length; j++)
+
+                for (int j = i + 1; j < n; j++)
                 {
-                    if (array[j] < array[minIndex])
+                    if (keySelector(list[j]).CompareTo(keySelector(list[minIndex])) < 0)
                     {
                         minIndex = j;
                     }
@@ -29,11 +23,16 @@ namespace DSA_SuperMarket_Management_System
 
                 if (minIndex != i)
                 {
-                    int tmp = array[i];
-                    array[i] = array[minIndex];
-                    array[minIndex] = tmp;
+                    Swap(list, i, minIndex);
                 }
             }
+        }
+
+        private void Swap<T>(List<T> list, int i, int j)
+        {
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
         }
     }
 }
