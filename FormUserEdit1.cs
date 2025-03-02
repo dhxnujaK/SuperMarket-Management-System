@@ -61,16 +61,10 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            User updatedUser = new User
-            {
-                NIC = currentUser.NIC,
-                Name = name,
-                ContactNumber = contactNumber
-            };
-
+            User updatedUser = new User(currentUser.Id, name, currentUser.NIC, contactNumber);
             userList.Update(currentUser.NIC, updatedUser);
             UpdateDatabase(updatedUser);
-           
+            
 
             MessageBox.Show("User updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
@@ -89,6 +83,7 @@ namespace DSA_SuperMarket_Management_System
             {
                 userList.Remove(currentUser);
                 DeleteFromDatabase(currentUser.NIC);
+                
 
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
@@ -127,6 +122,27 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        
+       
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void FormUserEdit1_Load(object sender, EventArgs e)
+        {
+            // Any required initialization when form loads
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+        }
     }
 }
