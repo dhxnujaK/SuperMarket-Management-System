@@ -187,6 +187,11 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
+
+        private void guna2Button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
 
