@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
-    public class DArray
+    public class DArray<T>
     {
-        private User[] data;
+        private T[] data;
         private int count;
         private int capacity;
 
         public DArray()
         {
             capacity = 4;
-            data = new User[capacity];
+            data = new T[capacity];
             count = 0;
         }
 
@@ -23,26 +19,26 @@ namespace DSA_SuperMarket_Management_System
         {
             for (int i = 0; i < count; i++)
             {
-                Console.WriteLine($"ID: {data[i].Id}, Name: {data[i].Name}, NIC: {data[i].NIC}, Contact: {data[i].ContactNumber}");
+                Console.Write(data[i] + " ");
             }
             Console.WriteLine();
         }
 
-        public void Add(User user)
+        public void Add(T item)
         {
             if (capacity == count)
             {
                 ExpandArray();
             }
 
-            data[count] = user;
+            data[count] = item;
             count++;
         }
 
         private void ExpandArray()
         {
             capacity *= 2;
-            User[] newArray = new User[capacity];
+            T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
         }
@@ -62,6 +58,7 @@ namespace DSA_SuperMarket_Management_System
 
             count--;
 
+            // Check if shrinking is needed (when the array is 25% full)
             if (count > 0 && count <= capacity / 4)
             {
                 Shrink();
@@ -70,24 +67,10 @@ namespace DSA_SuperMarket_Management_System
 
         private void Shrink()
         {
-            capacity /= 2;
-            User[] newArray = new User[capacity];
+            capacity = capacity / 2;
+            T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
-        }
-
-        public User? SearchById(int userId)
-        {
-            for (int i = 0; i < count; i++)
-            {
-                if (data[i].Id == userId)
-                {
-                    Console.WriteLine($"User Found: {data[i].Name} - {data[i].NIC} - {data[i].ContactNumber}");
-                    return data[i];
-                }
-            }
-            Console.WriteLine("User not found.");
-            return null;
         }
     }
 }
