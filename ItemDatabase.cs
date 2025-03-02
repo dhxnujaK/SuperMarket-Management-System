@@ -16,6 +16,7 @@ namespace DSA_SuperMarket_Management_System
                 conn.Open();
                 string createTableQuery = @"CREATE TABLE IF NOT EXISTS Items (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ItemName TEXT NOT NULL,  -- ✅ Added Item Name
                     ItemCode TEXT NOT NULL,
                     Category TEXT NOT NULL,
                     ExpiryDate TEXT NOT NULL,
@@ -32,15 +33,16 @@ namespace DSA_SuperMarket_Management_System
         }
 
         // Method to insert an item into the database
-        public static void InsertItem(string itemCode, string category, string expiryDate, string manufactureDate, double grossAmount, double netAmount, int quantity)
+        public static void InsertItem(string itemName, string itemCode, string category, string expiryDate, string manufactureDate, double grossAmount, double netAmount, int quantity)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-                string query = "INSERT INTO Items (ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) VALUES (@ItemCode, @Category, @ExpiryDate, @ManufactureDate, @GrossAmount, @NetAmount, @Quantity)";
+                string query = "INSERT INTO Items (ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) VALUES (@ItemName, @ItemCode, @Category, @ExpiryDate, @ManufactureDate, @GrossAmount, @NetAmount, @Quantity)";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
+                    cmd.Parameters.AddWithValue("@ItemName", itemName);  // ✅ Added Item Name
                     cmd.Parameters.AddWithValue("@ItemCode", itemCode);
                     cmd.Parameters.AddWithValue("@Category", category);
                     cmd.Parameters.AddWithValue("@ExpiryDate", expiryDate);
@@ -72,13 +74,14 @@ namespace DSA_SuperMarket_Management_System
                         items.Add(new Item
                         {
                             Id = reader.GetInt32(0),
-                            ItemCode = reader.GetString(1),
-                            Category = reader.GetString(2),
-                            ExpiryDate = reader.GetString(3),
-                            ManufactureDate = reader.GetString(4),
-                            GrossAmount = reader.GetDouble(5),
-                            NetAmount = reader.GetDouble(6),
-                            Quantity = reader.GetInt32(7)
+                            ItemName = reader.GetString(1),  // ✅ Added Item Name
+                            ItemCode = reader.GetString(2),
+                            Category = reader.GetString(3),
+                            ExpiryDate = reader.GetString(4),
+                            ManufactureDate = reader.GetString(5),
+                            GrossAmount = reader.GetDouble(6),
+                            NetAmount = reader.GetDouble(7),
+                            Quantity = reader.GetInt32(8)
                         });
                     }
                 }

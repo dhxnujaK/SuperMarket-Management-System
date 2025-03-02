@@ -18,10 +18,10 @@ namespace DSA_SuperMarket_Management_System
         private Guna2Button toggleDarkMode;
         private bool isDarkMode = false;
 
-        // These are the data structures that you want to use
-        private BinarySearchTree<Item> itemBST = new BinarySearchTree<Item>(); // Use generic Item type
-        private sLinkedList<Item> itemList = new sLinkedList<Item>(); // Use generic Item type
-        private DArray<Item> itemArray = new DArray<Item>(); // Use generic Item type
+        // Data structures
+        private BinarySearchTree<Item> itemBST = new BinarySearchTree<Item>();
+        private sLinkedList<Item> itemList = new sLinkedList<Item>();
+        private DArray<Item> itemArray = new DArray<Item>();
 
         public FormItem()
         {
@@ -129,7 +129,7 @@ namespace DSA_SuperMarket_Management_System
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-                string query = "SELECT Id, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity FROM Items";  // Ensure correct column names
+                string query = "SELECT Id, ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity FROM Items";
 
                 using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, conn))
                 {
@@ -137,50 +137,13 @@ namespace DSA_SuperMarket_Management_System
                     adapter.Fill(dt);
                     dataGridView1.DataSource = dt;
                     dataGridView1.Refresh();
-
-                    // Store items in the data structures
-                    foreach (DataRow row in dt.Rows)
-                    {
-                        try
-                        {
-                            int id = Convert.ToInt32(row["Id"]);
-                            string itemCode = row["ItemCode"].ToString();  
-                            string category = row["Category"].ToString();
-                            string expiryDate = row["ExpiryDate"].ToString();
-                            string manufactureDate = row["ManufactureDate"].ToString();
-                            double grossAmount = Convert.ToDouble(row["GrossAmount"]);
-                            double netAmount = Convert.ToDouble(row["NetAmount"]);
-                            int quantity = Convert.ToInt32(row["Quantity"]);
-
-                            Item item = new Item
-                            {
-                                Id = id,
-                                ItemCode = itemCode,
-                                Category = category,
-                                ExpiryDate = expiryDate,
-                                ManufactureDate = manufactureDate,
-                                GrossAmount = grossAmount,
-                                NetAmount = netAmount,
-                                Quantity = quantity
-                            };
-
-                            // Add to data structures
-                            itemList.AddLast(item); 
-                            itemArray.Add(item); 
-                            itemBST.InsertKey(item); // Add to Binary Search Tree
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Error processing row: " + ex.Message);
-                        }
-                    }
                 }
             }
         }
 
-
         private void button1_Click(object sender, EventArgs e)
         {
+            string itemName = textBox5.Text;
             string itemCode = textBox1.Text;
             string category = comboBox1.SelectedItem?.ToString();
             string expiryDate = dateTimePicker1.Value.ToString("yyyy-MM-dd");
@@ -189,7 +152,7 @@ namespace DSA_SuperMarket_Management_System
             double netAmount;
             int quantity;
 
-            if (string.IsNullOrEmpty(itemCode) || string.IsNullOrEmpty(category))
+            if (string.IsNullOrEmpty(itemName) || string.IsNullOrEmpty(itemCode) || string.IsNullOrEmpty(category))
             {
                 MessageBox.Show("Please fill all required fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -203,14 +166,12 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            // Insert into the database
-            ItemDatabase.InsertItem(itemCode, category, expiryDate, manufactureDate, grossAmount, netAmount, quantity);
+            ItemDatabase.InsertItem(itemName, itemCode, category, expiryDate, manufactureDate, grossAmount, netAmount, quantity);
             MessageBox.Show("Item added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Load and refresh data
             LoadItemsToGrid();
 
-            // Clear input fields
+            textBox5.Clear();
             textBox1.Clear();
             comboBox1.SelectedIndex = -1;
             textBox2.Clear();
@@ -225,7 +186,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
-        // Ensure to include all the definitions and method placeholders that you may need for the event handlers
+        // All event handlers retained
         private void label1_Click(object sender, EventArgs e) { }
         private void label5_Click(object sender, EventArgs e) { }
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e) { }
@@ -241,5 +202,7 @@ namespace DSA_SuperMarket_Management_System
         private void label2_Click(object sender, EventArgs e) { }
         private void label7_Click(object sender, EventArgs e) { }
         private void textBox1_TextChanged(object sender, EventArgs e) { }
+        private void label8_Click(object sender, EventArgs e) { }
+        private void textBox5_TextChanged(object sender, EventArgs e) { }
     }
 }

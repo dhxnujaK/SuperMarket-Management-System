@@ -9,6 +9,7 @@ namespace DSA_SuperMarket_Management_System
     public class Item : IComparable<Item>
     {
         public int Id { get; set; }
+        public string ItemName { get; set; }  
         public string ItemCode { get; set; }
         public string Category { get; set; }
         public string ExpiryDate { get; set; }
