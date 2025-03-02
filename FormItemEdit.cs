@@ -36,7 +36,7 @@ namespace DSA_SuperMarket_Management_System
                 MessageBox.Show("Please enter an Item Code to search.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            DebugPrintDataStructures();
+            //DebugPrintDataStructures();
 
             currentItem = null;
 
@@ -58,14 +58,14 @@ namespace DSA_SuperMarket_Management_System
 
             if (currentItem != null)
             {
-                textBox5.Text = currentItem.ItemName;          // ✅ Item Name
-                textBox1.Text = currentItem.ItemCode;          // ✅ Item Code 
-                comboBox1.SelectedItem = currentItem.Category; // ✅ Category
-                dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate); // ✅ Expiry Date
-                dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate); // ✅ Manufacture Date
-                textBox2.Text = currentItem.GrossAmount.ToString();  // ✅ Gross Amount
-                textBox3.Text = currentItem.NetAmount.ToString();    // ✅ Net Amount
-                textBox4.Text = currentItem.Quantity.ToString();     // ✅ Quantity 1
+                textBox5.Text = currentItem.ItemName;          //Item Name
+                textBox1.Text = currentItem.ItemCode;          //Item Code 
+                comboBox1.SelectedItem = currentItem.Category; //Category
+                dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate); //Expiry Date
+                dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate); //Manufacture Date
+                textBox2.Text = currentItem.GrossAmount.ToString();  //Gross Amount
+                textBox3.Text = currentItem.NetAmount.ToString();    //✅ Net Amount
+                textBox4.Text = currentItem.Quantity.ToString();     //✅ Quantity 1
             }
 
 
@@ -76,7 +76,7 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void DebugPrintDataStructures()
+        /*private void DebugPrintDataStructures()
         {
             Console.WriteLine("===== Debug: Checking Data Structures =====");
 
@@ -96,7 +96,7 @@ namespace DSA_SuperMarket_Management_System
             {
                 Console.WriteLine($"Dynamic Array Item: {itemArray.GetAt(i).ItemCode}");
             }
-        }
+        }*/
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
