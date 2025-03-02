@@ -1,178 +1,166 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
-    public class TreeNode
+    public class TreeNode<T> where T : IComparable<T>
     {
-        public User Data;
-        public TreeNode? Left;
-        public TreeNode? Right;
+        public T Data;
+        public TreeNode<T>? left;
+        public TreeNode<T>? right;
 
-        public TreeNode(User data)
+        public TreeNode(T data)
         {
             Data = data;
-            Left = null;
-            Right = null;
+            left = null;
+            right = null;
         }
     }
 
-    public class BinarySearchTree
+    public class BinarySearchTree<T> where T : IComparable<T>
     {
-        private TreeNode? root;
+        private TreeNode<T>? root;
 
         public BinarySearchTree()
         {
             root = null;
         }
 
-        public void InsertUser(User user)
+        public void InsertKey(T data)
         {
-            root = InsertRecursively(user, root);
+            root = InsertRecursively(data, root);
         }
 
-        private TreeNode InsertRecursively(User user, TreeNode? root)
+        public void Delete(T data)
         {
-            if (root == null)
-            {
-                return new TreeNode(user);
-            }
-
-            if (user.Id < root.Data.Id)
-            {
-                root.Left = InsertRecursively(user, root.Left);
-            }
-            else if (user.Id > root.Data.Id)
-            {
-                root.Right = InsertRecursively(user, root.Right);
-            }
-
-            return root;
+            root = DeleteRecursively(root, data);
         }
 
-        public void DeleteUser(int userId)
-        {
-            root = DeleteRecursively(root, userId);
-        }
-
-        private TreeNode? DeleteRecursively(TreeNode? root, int userId)
-        {
-            if (root == null)
-            {
-                return root;
-            }
-
-            if (userId < root.Data.Id)
-            {
-                root.Left = DeleteRecursively(root.Left, userId);
-            }
-            else if (userId > root.Data.Id)
-            {
-                root.Right = DeleteRecursively(root.Right, userId);
-            }
-            else
-            {
-                if (root.Right == null)
-                {
-                    return root.Left;
-                }
-                if (root.Left == null)
-                {
-                    return root.Right;
-                }
-
-                root.Data = FindMinUser(root.Right);
-                root.Right = DeleteRecursively(root.Right, root.Data.Id);
-            }
-
-            return root;
-        }
-
-        private User FindMinUser(TreeNode? root)
-        {
-            while (root?.Left != null)
-            {
-                root = root.Left;
-            }
-
-            return root!.Data;
-        }
-
-        public User? SearchUser(int userId)
-        {
-            return SearchRecursively(root, userId);
-        }
-
-        private User? SearchRecursively(TreeNode? root, int userId)
-        {
-            if (root == null)
-            {
-                return null;
-            }
-
-            if (userId == root.Data.Id)
-            {
-                return root.Data;
-            }
-
-            if (userId < root.Data.Id)
-            {
-                return SearchRecursively(root.Left, userId);
-            }
-            else
-            {
-                return SearchRecursively(root.Right, userId);
-            }
-        }
-
-        public void PrintInOrder()
+        public void PrintTree()
         {
             PrintInOrder(root);
             Console.WriteLine();
         }
 
-        private void PrintInOrder(TreeNode? root)
-        {
-            if (root != null)
-            {
-                PrintInOrder(root.Left);
-                Console.WriteLine($"ID: {root.Data.Id}, Name: {root.Data.Name}, NIC: {root.Data.NIC}, Contact: {root.Data.ContactNumber}");
-                PrintInOrder(root.Right);
-            }
-        }
-
-        public void PrintPreOrder()
+        public void PrintPreorderTree()
         {
             PrintPreOrder(root);
             Console.WriteLine();
         }
 
-        private void PrintPreOrder(TreeNode? root)
-        {
-            if (root != null)
-            {
-                Console.WriteLine($"ID: {root.Data.Id}, Name: {root.Data.Name}, NIC: {root.Data.NIC}, Contact: {root.Data.ContactNumber}");
-                PrintPreOrder(root.Left);
-                PrintPreOrder(root.Right);
-            }
-        }
-
-        public void PrintPostOrder()
+        public void PrintPostorderTree()
         {
             PrintPostOrder(root);
             Console.WriteLine();
         }
 
-        private void PrintPostOrder(TreeNode? root)
+        // Recursively insert the node into the tree
+        private TreeNode<T> InsertRecursively(T data, TreeNode<T>? node)
         {
-            if (root != null)
+            if (node == null)
             {
-                PrintPostOrder(root.Left);
-                PrintPostOrder(root.Right);
-                Console.WriteLine($"ID: {root.Data.Id}, Name: {root.Data.Name}, NIC: {root.Data.NIC}, Contact: {root.Data.ContactNumber}");
+                node = new TreeNode<T>(data);
+                return node;
+            }
+
+            if (data.CompareTo(node.Data) < 0)
+            {
+                node.left = InsertRecursively(data, node.left);
+            }
+            else if (data.CompareTo(node.Data) > 0)
+            {
+                node.right = InsertRecursively(data, node.right);
+            }
+
+            return node;
+        }
+
+        // Recursively delete the node from the tree
+        private TreeNode<T>? DeleteRecursively(TreeNode<T>? node, T data)
+        {
+            if (node == null)
+            {
+                return node;
+            }
+
+            if (data.CompareTo(node.Data) < 0)
+            {
+                node.left = DeleteRecursively(node.left, data);
+            }
+            else if (data.CompareTo(node.Data) > 0)
+            {
+                node.right = DeleteRecursively(node.right, data);
+            }
+            else
+            {
+                // Node to delete found
+
+                // Case 1: Node has no children
+                if (node.left == null && node.right == null)
+                {
+                    return null;
+                }
+                // Case 2: Node has only one child
+                else if (node.left == null)
+                {
+                    return node.right;
+                }
+                else if (node.right == null)
+                {
+                    return node.left;
+                }
+                // Case 3: Node has two children
+                else
+                {
+                    // Find the minimum value in the right subtree
+                    node.Data = FindMinRecursively(node.right);
+                    // Delete the minimum node
+                    node.right = DeleteRecursively(node.right, node.Data);
+                }
+            }
+
+            return node;
+        }
+
+        // Find the minimum value in a subtree
+        private T FindMinRecursively(TreeNode<T>? node)
+        {
+            if (node.left == null)
+            {
+                return node.Data;
+            }
+            return FindMinRecursively(node.left);
+        }
+
+        // In-order traversal
+        private void PrintInOrder(TreeNode<T>? node)
+        {
+            if (node != null)
+            {
+                PrintInOrder(node.left);
+                Console.Write(node.Data + " ");
+                PrintInOrder(node.right);
+            }
+        }
+
+        // Pre-order traversal
+        private void PrintPreOrder(TreeNode<T>? node)
+        {
+            if (node != null)
+            {
+                Console.Write(node.Data + " ");
+                PrintPreOrder(node.left);
+                PrintPreOrder(node.right);
+            }
+        }
+
+        // Post-order traversal
+        private void PrintPostOrder(TreeNode<T>? node)
+        {
+            if (node != null)
+            {
+                PrintPostOrder(node.left);
+                PrintPostOrder(node.right);
+                Console.Write(node.Data + " ");
             }
         }
     }
