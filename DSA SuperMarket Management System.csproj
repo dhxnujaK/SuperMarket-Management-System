@@ -94,6 +94,12 @@
     <Compile Include="FormUser.Designer.cs">
       <DependentUpon>FormUser.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUserEdit1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUserEdit1.Designer.cs">
+      <DependentUpon>FormUserEdit1.cs</DependentUpon>
+    </Compile>
     <Compile Include="InsertionSort.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="MergeSort.cs" />
@@ -102,14 +108,11 @@
     <Compile Include="QuickSort.cs" />
     <Compile Include="SelectionSort.cs" />
     <Compile Include="user.cs" />
-    <Compile Include="FormUserEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormUserEdit.Designer.cs">
-      <DependentUpon>FormUserEdit.cs</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="FormUser.resx">
       <DependentUpon>FormUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUserEdit1.resx">
+      <DependentUpon>FormUserEdit1.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -120,9 +123,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="FormUserEdit.resx">
-      <DependentUpon>FormUserEdit.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
