@@ -58,8 +58,7 @@ namespace DSA_SuperMarket_Management_System
         {
             if (node == null)
             {
-                node = new TreeNode<T>(data);
-                return node;
+                return new TreeNode<T>(data);
             }
 
             if (data.CompareTo(node.Data) < 0)
@@ -130,31 +129,37 @@ namespace DSA_SuperMarket_Management_System
             }
             return FindMinRecursively(node.left);
         }
-        public TreeNode<T>? Search(string itemCode)
+
+        // Search for a User by NIC
+        public TreeNode<T>? Search(string nic)
         {
-            return SearchRecursively(root, itemCode);
+            return SearchRecursively(root, nic);
         }
 
-        private TreeNode<T>? SearchRecursively(TreeNode<T>? node, string itemCode)
+        private TreeNode<T>? SearchRecursively(TreeNode<T>? node, string nic)
         {
             if (node == null) return null;
 
-            dynamic item = node.Data;
-            if (item.ItemCode == itemCode)
-                return node;
+            if (node.Data is User user)
+            {
+                int comparison = string.Compare(user.NIC, nic, StringComparison.OrdinalIgnoreCase);
+                if (comparison == 0)
+                    return node;
+                else if (comparison > 0)
+                    return SearchRecursively(node.left, nic);
+                else
+                    return SearchRecursively(node.right, nic);
+            }
 
-            if (string.Compare(item.ItemCode, itemCode) > 0)
-                return SearchRecursively(node.left, itemCode);
-            else
-                return SearchRecursively(node.right, itemCode);
+            return null; // Return null if T is not a User type
         }
-        // In-order traversal
+
         private void PrintInOrder(TreeNode<T>? node)
         {
             if (node != null)
             {
                 PrintInOrder(node.left);
-                Console.Write(node.Data + " ");
+                Console.WriteLine(node.Data);  // Print as a new line instead of space
                 PrintInOrder(node.right);
             }
         }
