@@ -11,9 +11,11 @@ namespace DSA_SuperMarket_Management_System
     public partial class FormUser : Form
     {
         private readonly string connectionString = "Data Source=UserDatabase.db;Version=3;";
-        private BinarySearchTree userBST = new BinarySearchTree();
-        private sLinkedList userList = new sLinkedList();
-        private DArray userArray = new DArray();
+
+        // Using generics with User type
+        private BinarySearchTree<User> userBST = new BinarySearchTree<User>();
+        private sLinkedList<User> userList = new sLinkedList<User>();
+        private DArray<User> userArray = new DArray<User>();
 
         public FormUser()
         {
@@ -87,9 +89,10 @@ namespace DSA_SuperMarket_Management_System
                             dataGridView1.Refresh();
                         }
 
-                        userBST = new BinarySearchTree();
-                        userList = new sLinkedList();
-                        userArray = new DArray();
+                        // Clearing data structures before reloading
+                        userBST = new BinarySearchTree<User>();
+                        userList = new sLinkedList<User>();
+                        userArray = new DArray<User>();
 
                         foreach (DataRow row in dataTable.Rows)
                         {
@@ -99,7 +102,7 @@ namespace DSA_SuperMarket_Management_System
                             string contact = row["ContactNumber"].ToString();
 
                             User user = new User(id, name, nic, contact);
-                            userBST.InsertUser(user);
+                            userBST.InsertKey(user);
                             userList.AddLast(user);
                             userArray.Add(user);
                         }
@@ -214,9 +217,8 @@ namespace DSA_SuperMarket_Management_System
 
             foreach (Control ctrl in this.Controls)
             {
-                if (ctrl is TextBox)
+                if (ctrl is TextBox txt)
                 {
-                    TextBox txt = (TextBox)ctrl;
                     txt.Font = new Font("Segoe UI", 10);
                     txt.BackColor = Color.White;
                     txt.ForeColor = Color.Black;
