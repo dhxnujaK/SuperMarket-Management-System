@@ -92,7 +92,7 @@
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(529, 39);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 35);
+            this.button1.Size = new System.Drawing.Size(338, 35);
             this.button1.TabIndex = 6;
             this.button1.Text = "Search";
             this.button1.UseVisualStyleBackColor = true;
@@ -101,9 +101,9 @@
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(299, 329);
+            this.button2.Location = new System.Drawing.Point(529, 96);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 35);
+            this.button2.Size = new System.Drawing.Size(338, 35);
             this.button2.TabIndex = 7;
             this.button2.Text = "Save";
             this.button2.UseVisualStyleBackColor = true;
@@ -122,9 +122,9 @@
             // button3
             // 
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(63, 387);
+            this.button3.Location = new System.Drawing.Point(529, 156);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(105, 35);
+            this.button3.Size = new System.Drawing.Size(338, 35);
             this.button3.TabIndex = 9;
             this.button3.Text = "Delete";
             this.button3.UseVisualStyleBackColor = true;
@@ -133,12 +133,13 @@
             // button4
             // 
             this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.Location = new System.Drawing.Point(529, 389);
+            this.button4.Location = new System.Drawing.Point(529, 217);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(112, 33);
+            this.button4.Size = new System.Drawing.Size(338, 33);
             this.button4.TabIndex = 10;
             this.button4.Text = "Cancel";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // FormUserEdit1
             // 
@@ -157,6 +158,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "FormUserEdit1";
             this.Text = "FormUserEdit1";
+            this.Load += new System.EventHandler(this.FormUserEdit1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

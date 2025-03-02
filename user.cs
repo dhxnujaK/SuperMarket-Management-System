@@ -7,6 +7,9 @@ public class User : IComparable<User>
     public string NIC { get; set; }
     public string ContactNumber { get; set; }
 
+    // Parameterless constructor (needed for some generic handling)
+    public User() { }
+
     public User(int id, string name, string nic, string contactNumber)
     {
         Id = id;
@@ -20,7 +23,12 @@ public class User : IComparable<User>
     {
         if (other == null) return 1;
 
-        return this.Id.CompareTo(other.Id); // Sort based on ID
-        // If sorting by NIC instead, use: return this.NIC.CompareTo(other.NIC);
+        return this.NIC.CompareTo(other.NIC); // Sort based on NIC instead of ID
+    }
+
+    // Override ToString for debugging
+    public override string ToString()
+    {
+        return $"ID: {Id}, Name: {Name}, NIC: {NIC}, Contact: {ContactNumber}";
     }
 }
