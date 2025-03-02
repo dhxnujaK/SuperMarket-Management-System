@@ -33,6 +33,7 @@ namespace DSA_SuperMarket_Management_System
             CustomizeDataGridView();
             CustomizeUI();
             LoadItemsToGrid();
+            LoadItemsToDataStructures();
         }
 
         private void ApplyShadow()
@@ -123,6 +124,40 @@ namespace DSA_SuperMarket_Management_System
 
             toggleDarkMode.Text = isDarkMode ? "☼" : "☾";
         }
+        private void LoadItemsToDataStructures()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity FROM Items";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Item item = new Item
+                            {
+                                ItemName = reader["ItemName"].ToString(),
+                                ItemCode = reader["ItemCode"].ToString(),
+                                Category = reader["Category"].ToString(),
+                                ExpiryDate = reader["ExpiryDate"].ToString(),
+                                ManufactureDate = reader["ManufactureDate"].ToString(),
+                                GrossAmount = Convert.ToDouble(reader["GrossAmount"]),
+                                NetAmount = Convert.ToDouble(reader["NetAmount"]),
+                                Quantity = Convert.ToInt32(reader["Quantity"])
+                            };
+
+                            itemBST.InsertKey(item);
+                            itemList.AddLast(item);
+                            itemArray.Add(item);
+                        }
+                    }
+                }
+            }
+        }
+
 
         private void LoadItemsToGrid()
         {
@@ -141,7 +176,7 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+            private void button1_Click(object sender, EventArgs e)
         {
             string itemName = textBox5.Text;
             string itemCode = textBox1.Text;

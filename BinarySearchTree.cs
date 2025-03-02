@@ -139,25 +139,32 @@ namespace DSA_SuperMarket_Management_System
         {
             if (node == null) return null;
 
-            dynamic item = node.Data;
-            if (item.ItemCode == itemCode)
-                return node;
+            if (node.Data is Item item)
+            {
+                int comparison = string.Compare(item.ItemCode, itemCode, StringComparison.OrdinalIgnoreCase);
+                if (comparison == 0)
+                    return node;
+                else if (comparison > 0)
+                    return SearchRecursively(node.left, itemCode);
+                else
+                    return SearchRecursively(node.right, itemCode);
+            }
 
-            if (string.Compare(item.ItemCode, itemCode) > 0)
-                return SearchRecursively(node.left, itemCode);
-            else
-                return SearchRecursively(node.right, itemCode);
+            return null; // Return null if T is not an Item type
         }
-        // In-order traversal
+
+        
+
         private void PrintInOrder(TreeNode<T>? node)
         {
             if (node != null)
             {
                 PrintInOrder(node.left);
-                Console.Write(node.Data + " ");
+                Console.WriteLine(node.Data);  // Print as a new line instead of space
                 PrintInOrder(node.right);
             }
         }
+
 
         // Pre-order traversal
         private void PrintPreOrder(TreeNode<T>? node)

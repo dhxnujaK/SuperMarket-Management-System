@@ -16,8 +16,14 @@ namespace DSA_SuperMarket_Management_System
 
         public int CompareTo(Item other)
         {
-            if (other == null) return 1;
             return string.Compare(this.ItemCode, other.ItemCode, StringComparison.OrdinalIgnoreCase);
         }
+
+        public override string ToString()
+        {
+            return $"{ItemCode} - {ItemName}";
+        }
     }
+
 }
+

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using System.Data.SQLite;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -11,6 +12,8 @@ namespace DSA_SuperMarket_Management_System
         private BinarySearchTree<Item> itemBST;
         private sLinkedList<Item> itemList;
         private DArray<Item> itemArray;
+        private string connectionString = "Data Source=supermarket.db;Version=3;";
+        private Item currentItem;
 
         public FormItemEdit(BinarySearchTree<Item> bst, sLinkedList<Item> list, DArray<Item> array)
         {
@@ -24,7 +27,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void textBox6_TextChanged(object sender, EventArgs e) { }
 
-        // 🔹 **Search Item by Item Code**
+
         private void guna2Button1_Click(object sender, EventArgs e)
         {
             string searchCode = textBox6.Text.Trim();
@@ -33,49 +36,54 @@ namespace DSA_SuperMarket_Management_System
                 MessageBox.Show("Please enter an Item Code to search.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            DebugPrintDataStructures();
 
-            Item foundItem = null;
+            currentItem = null;
 
-            // ✅ **Search in BST**
             var bstNode = itemBST.Search(searchCode);
-            if (bstNode != null)
+            if (bstNode != null && bstNode.Data != null && bstNode.Data.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase))
             {
-                foundItem = bstNode.Data;
+                currentItem = bstNode.Data;
             }
 
-            // ✅ **Search in Linked List if not found**
-            if (foundItem == null)
+            if (currentItem == null)
             {
-                foundItem = itemList.Find(x => x.ItemCode == searchCode);
+                currentItem = itemList.Find(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
             }
 
-            // ✅ **Search in Dynamic Array if not found**
-            if (foundItem == null)
+            if (currentItem == null)
             {
-                foundItem = itemArray.SearchItem(x => x.ItemCode == searchCode);
+                currentItem = itemArray.SearchItem(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
             }
 
-            // ✅ **Display the item in the text fields**
-            if (foundItem != null)
+            if (currentItem != null)
             {
-                textBox1.Text = foundItem.ItemName;
-                textBox2.Text = foundItem.ItemCode;
-                comboBox1.SelectedItem = foundItem.Category;
-                dateTimePicker1.Value = DateTime.Parse(foundItem.ExpiryDate);
-                dateTimePicker2.Value = DateTime.Parse(foundItem.ManufactureDate);
-                textBox3.Text = foundItem.GrossAmount.ToString();
-                textBox4.Text = foundItem.NetAmount.ToString();
-                textBox5.Text = foundItem.Quantity.ToString();
+                textBox5.Text = currentItem.Quantity.ToString();     // ✅ Quantity
+                textBox1.Text = currentItem.ItemName;          // ✅ Item Name
+                textBox2.Text = currentItem.ItemCode;          // ✅ Item Code
+                comboBox1.SelectedItem = currentItem.Category; // ✅ Category
+                dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate); // ✅ Expiry Date
+                dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate); // ✅ Manufacture Date
+                textBox3.Text = currentItem.GrossAmount.ToString();  // ✅ Gross Amount
+               
+                textBox4.Text = currentItem.NetAmount.ToString();    // ✅ Net Amount
             }
+
+
             else
             {
                 MessageBox.Show("Item not found!", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
-        // 🔹 **Update Item**
         private void guna2Button2_Click(object sender, EventArgs e)
         {
+            if (currentItem == null)
+            {
+                MessageBox.Show("No item selected for update.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             string itemName = textBox1.Text.Trim();
             string itemCode = textBox2.Text.Trim();
             string category = comboBox1.SelectedItem?.ToString();
@@ -99,7 +107,6 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            // ✅ **Create Updated Item**
             Item updatedItem = new Item
             {
                 ItemName = itemName,
@@ -112,27 +119,68 @@ namespace DSA_SuperMarket_Management_System
                 Quantity = quantity
             };
 
-            // ✅ **Update in BST**
-            itemBST.Delete(updatedItem);
-            itemBST.InsertKey(updatedItem);
-
-            // ✅ **Update in Linked List**
+            itemBST.Delete(currentItem);
             itemList.Update(itemCode, updatedItem);
 
-            // ✅ **Update in Dynamic Array**
-            int index = itemArray.Find(x => x.ItemCode == itemCode);
-
-            if (index != -1)  // ✅ If the item is found
+            int index = itemArray.Find(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase));
+            if (index != -1)
             {
                 itemArray.Update(index, updatedItem);
             }
-            else
-            {
-                MessageBox.Show("Item not found in array!", "Update Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+
+            itemBST.InsertKey(updatedItem);
+
+            UpdateDatabase(updatedItem);
 
             MessageBox.Show("Item updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
+        }
+
+        private void DebugPrintDataStructures()
+        {
+            Console.WriteLine("===== Debug: Checking Data Structures =====");
+
+            Console.WriteLine("BST Items:");
+            itemBST.PrintTree(); // Make sure `PrintTree()` prints all elements in BST
+
+            Console.WriteLine("Linked List Items:");
+            Node<Item> current = itemList.Head;
+            while (current != null)
+            {
+                Console.WriteLine($"Linked List Item: {current.Data.ItemCode}");
+                current = current.Next;
+            }
+
+            Console.WriteLine("Dynamic Array Items:");
+            for (int i = 0; i < itemArray.Count; i++)
+            {
+                Console.WriteLine($"Dynamic Array Item: {itemArray.GetAt(i).ItemCode}");
+            }
+        }
+
+
+        private void UpdateDatabase(Item updatedItem)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "UPDATE Items SET ItemName = @ItemName, Category = @Category, ExpiryDate = @ExpiryDate, " +
+                               "ManufactureDate = @ManufactureDate, GrossAmount = @GrossAmount, NetAmount = @NetAmount, " +
+                               "Quantity = @Quantity WHERE ItemCode = @ItemCode";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ItemName", updatedItem.ItemName);
+                    cmd.Parameters.AddWithValue("@Category", updatedItem.Category);
+                    cmd.Parameters.AddWithValue("@ExpiryDate", updatedItem.ExpiryDate);
+                    cmd.Parameters.AddWithValue("@ManufactureDate", updatedItem.ManufactureDate);
+                    cmd.Parameters.AddWithValue("@GrossAmount", updatedItem.GrossAmount);
+                    cmd.Parameters.AddWithValue("@NetAmount", updatedItem.NetAmount);
+                    cmd.Parameters.AddWithValue("@Quantity", updatedItem.Quantity);
+                    cmd.Parameters.AddWithValue("@ItemCode", updatedItem.ItemCode);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }
