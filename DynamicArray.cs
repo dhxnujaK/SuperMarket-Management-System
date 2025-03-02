@@ -107,13 +107,7 @@ namespace DSA_SuperMarket_Management_System
             return -1;  
         }
 
-
-
-        /*// Check if an item exists
-        public bool Contains(T item)
-        {
-            return Find(item) != -1;
-        }*/
+       
 
         // Update an existing item at a given index
         public bool Update(int index, T newItem)

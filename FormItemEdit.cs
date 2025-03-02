@@ -192,6 +192,52 @@ namespace DSA_SuperMarket_Management_System
         {
             this.Close();
         }
+
+        private void guna2Button3_Click(object sender, EventArgs e)
+        {
+
+            if (currentItem == null)
+            {
+                MessageBox.Show("No item selected to delete.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                // Delete from data structures
+                itemBST.Delete(currentItem);
+                itemList.Remove(currentItem);
+
+                int index = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
+                if (index != -1)
+                {
+                    itemArray.RemoveAt(index);
+                }
+
+                // Delete from database
+                DeleteFromDatabase(currentItem.ItemCode);
+              
+
+                MessageBox.Show("Item deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+        }
+        private void DeleteFromDatabase(string itemCode)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "DELETE FROM Items WHERE ItemCode = @ItemCode";
+
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ItemCode", itemCode);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }
 

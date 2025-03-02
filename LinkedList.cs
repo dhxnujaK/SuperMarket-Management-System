@@ -190,7 +190,38 @@ namespace DSA_SuperMarket_Management_System
             }
             return false;
         }
+        public bool Remove(T item)
+        {
+            Node<T>? currentNode = Head;
+            while (currentNode != null)
+            {
+                if (EqualityComparer<T>.Default.Equals(currentNode.Data, item))
+                {
+                    if (currentNode.Previous != null)
+                    {
+                        currentNode.Previous.Next = currentNode.Next;
+                    }
+                    else
+                    {
+                        Head = currentNode.Next; // Removing Head
+                    }
 
+                    if (currentNode.Next != null)
+                    {
+                        currentNode.Next.Previous = currentNode.Previous;
+                    }
+                    else
+                    {
+                        Tail = currentNode.Previous; // Removing Tail
+                    }
+
+                    Count--;
+                    return true;
+                }
+                currentNode = currentNode.Next;
+            }
+            return false;
+        }
 
         // Print all elements of the linked list
         public void Print()
