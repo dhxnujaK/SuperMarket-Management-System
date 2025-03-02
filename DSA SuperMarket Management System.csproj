@@ -102,6 +102,12 @@
     <Compile Include="QuickSort.cs" />
     <Compile Include="SelectionSort.cs" />
     <Compile Include="user.cs" />
+    <Compile Include="FormUserEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUserEdit.Designer.cs">
+      <DependentUpon>FormUserEdit.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormUser.resx">
       <DependentUpon>FormUser.cs</DependentUpon>
     </EmbeddedResource>
@@ -114,6 +120,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FormUserEdit.resx">
+      <DependentUpon>FormUserEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
