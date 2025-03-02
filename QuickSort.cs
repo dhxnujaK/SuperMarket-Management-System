@@ -1,46 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DSA_SuperMarket_Management_System
 {
     public class QuickSort
     {
-        public int LomutoPartition(int[] array, int Low, int High)
+        public void Sort<T, TKey>(List<T> list, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
         {
-            int pivot = High;
-            int i = Low - 1;
+            QuickSortAlgorithm(list, 0, list.Count - 1, keySelector);
+        }
 
-            for (int j = Low; j < High; j++)
+        private void QuickSortAlgorithm<T, TKey>(List<T> list, int low, int high, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
+        {
+            if (low < high)
             {
-                if (array[j] < array[pivot])
+                int pivotIndex = LomutoPartition(list, low, high, keySelector);
+                QuickSortAlgorithm(list, low, pivotIndex - 1, keySelector);
+                QuickSortAlgorithm(list, pivotIndex + 1, high, keySelector);
+            }
+        }
+
+        private int LomutoPartition<T, TKey>(List<T> list, int low, int high, Func<T, TKey> keySelector) where TKey : IComparable<TKey>
+        {
+            T pivot = list[high];
+            int i = low - 1;
+
+            for (int j = low; j < high; j++)
+            {
+                if (keySelector(list[j]).CompareTo(keySelector(pivot)) < 0)
                 {
                     i++;
-                    swap(array, i, j);
+                    Swap(list, i, j);
                 }
             }
-            swap(array, i + 1, High);
+            Swap(list, i + 1, high);
             return i + 1;
-
         }
 
-        public void swap(int[] array, int i, int j)
+        private void Swap<T>(List<T> list, int i, int j)
         {
-            int tmp = array[i];
-            array[i] = array[j];
-            array[j] = tmp;
-        }
-
-        public void QuickSortAlgorithm(int[] array, int Low, int High)
-        {
-            if (Low < High)
-            {
-                int Pivot = LomutoPartition(array, Low, High);
-                QuickSortAlgorithm(array, Low, Pivot - 1);
-                QuickSortAlgorithm(array, Pivot + 1, High);
-            }
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
         }
     }
 }
