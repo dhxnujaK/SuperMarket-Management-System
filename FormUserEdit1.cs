@@ -35,12 +35,14 @@ namespace DSA_SuperMarket_Management_System
             {
                 textBox2.Text = currentUser.Name;
                 textBox3.Text = currentUser.ContactNumber;
+                textBox4.Text = currentUser.NIC;
             }
             else
             {
                 MessageBox.Show("User not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 textBox2.Clear();
                 textBox3.Clear();
+                textBox4.Clear();
             }
         }
 
@@ -54,23 +56,25 @@ namespace DSA_SuperMarket_Management_System
 
             string name = textBox2.Text.Trim();
             string contactNumber = textBox3.Text.Trim();
+            string newNIC = textBox4.Text.Trim();
+            string oldNIC = currentUser.NIC;
 
-            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(contactNumber))
+            if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(contactNumber) || string.IsNullOrEmpty(newNIC))
             {
                 MessageBox.Show("Please fill in all required fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            User updatedUser = new User(currentUser.Id, name, currentUser.NIC, contactNumber);
-            userList.Update(user => user.NIC == currentUser.NIC, updatedUser);
-            UpdateDatabase(updatedUser);
-            
+            User updatedUser = new User(currentUser.Id, name, newNIC, contactNumber);
+            userList.Remove(user => user.NIC == oldNIC); // Remove old user
+            userList.AddLast(updatedUser); // Add updated user
+            UpdateDatabase(oldNIC, updatedUser);
 
             MessageBox.Show("User updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e) 
+        private void button3_Click(object sender, EventArgs e)
         {
             if (currentUser == null)
             {
@@ -81,28 +85,27 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                
-                userList.Remove(x => x.NIC.Equals(currentUser.NIC, StringComparison.OrdinalIgnoreCase));
+                userList.Remove(user => user.NIC == currentUser.NIC); // Remove user
                 DeleteFromDatabase(currentUser.NIC);
-                
 
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }
 
-        private void UpdateDatabase(User updatedUser)
+        private void UpdateDatabase(string oldNIC, User updatedUser)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
-                string query = "UPDATE Users SET Name = @Name, ContactNumber = @ContactNumber WHERE NIC = @NIC";
+                string query = "UPDATE Users SET Name = @Name, ContactNumber = @ContactNumber, NIC = @NewNIC WHERE NIC = @OldNIC";
 
                 using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@Name", updatedUser.Name);
                     cmd.Parameters.AddWithValue("@ContactNumber", updatedUser.ContactNumber);
-                    cmd.Parameters.AddWithValue("@NIC", updatedUser.NIC);
+                    cmd.Parameters.AddWithValue("@NewNIC", updatedUser.NIC);
+                    cmd.Parameters.AddWithValue("@OldNIC", oldNIC);
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -122,8 +125,6 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
-
-        
 
         private void button4_Click(object sender, EventArgs e)
         {
@@ -149,7 +150,10 @@ namespace DSA_SuperMarket_Management_System
 
         private void label4_Click(object sender, EventArgs e)
         {
+        }
 
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 }
