@@ -45,7 +45,7 @@
             "Selection Sort",
             "Quick Sort",
             "Merge Sort"});
-            this.comboBox1.Location = new System.Drawing.Point(340, 48);
+            this.comboBox1.Location = new System.Drawing.Point(340, 53);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(345, 28);
             this.comboBox1.TabIndex = 0;
@@ -64,7 +64,7 @@
             "Manufacture Date",
             "Gross Amount",
             "Net Amount"});
-            this.comboBox2.Location = new System.Drawing.Point(340, 130);
+            this.comboBox2.Location = new System.Drawing.Point(340, 135);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(345, 28);
             this.comboBox2.TabIndex = 1;
