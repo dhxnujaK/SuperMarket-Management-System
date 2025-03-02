@@ -100,6 +100,12 @@
     <Compile Include="FormUserEdit1.Designer.cs">
       <DependentUpon>FormUserEdit1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormUserSort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormUserSort.Designer.cs">
+      <DependentUpon>FormUserSort.cs</DependentUpon>
+    </Compile>
     <Compile Include="InsertionSort.cs" />
     <Compile Include="LinkedList.cs" />
     <Compile Include="MergeSort.cs" />
@@ -113,6 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormUserEdit1.resx">
       <DependentUpon>FormUserEdit1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormUserSort.resx">
+      <DependentUpon>FormUserSort.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
