@@ -58,16 +58,16 @@ namespace DSA_SuperMarket_Management_System
 
             if (currentItem != null)
             {
-                textBox5.Text = currentItem.Quantity.ToString();     // ✅ Quantity
-                textBox1.Text = currentItem.ItemName;          // ✅ Item Name
-                textBox2.Text = currentItem.ItemCode;          // ✅ Item Code
+                textBox5.Text = currentItem.ItemName;          // ✅ Item Name
+                textBox1.Text = currentItem.ItemCode;          // ✅ Item Code 
                 comboBox1.SelectedItem = currentItem.Category; // ✅ Category
                 dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate); // ✅ Expiry Date
                 dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate); // ✅ Manufacture Date
-                textBox3.Text = currentItem.GrossAmount.ToString();  // ✅ Gross Amount
-               
-                textBox4.Text = currentItem.NetAmount.ToString();    // ✅ Net Amount
+                textBox2.Text = currentItem.GrossAmount.ToString();  // ✅ Gross Amount
+                textBox3.Text = currentItem.NetAmount.ToString();    // ✅ Net Amount
+                textBox4.Text = currentItem.Quantity.ToString();     // ✅ Quantity 1
             }
+
 
 
             else
@@ -76,7 +76,34 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
-        private void guna2Button2_Click(object sender, EventArgs e)
+        private void DebugPrintDataStructures()
+        {
+            Console.WriteLine("===== Debug: Checking Data Structures =====");
+
+            Console.WriteLine("BST Items:");
+            itemBST.PrintTree(); // Make sure `PrintTree()` prints all elements in BST
+
+            Console.WriteLine("Linked List Items:");
+            Node<Item> current = itemList.Head;
+            while (current != null)
+            {
+                Console.WriteLine($"Linked List Item: {current.Data.ItemCode}");
+                current = current.Next;
+            }
+
+            Console.WriteLine("Dynamic Array Items:");
+            for (int i = 0; i < itemArray.Count; i++)
+            {
+                Console.WriteLine($"Dynamic Array Item: {itemArray.GetAt(i).ItemCode}");
+            }
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guna2Button2_Click_1(object sender, EventArgs e)
         {
             if (currentItem == null)
             {
@@ -84,8 +111,8 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            string itemName = textBox1.Text.Trim();
-            string itemCode = textBox2.Text.Trim();
+            string itemName = textBox5.Text.Trim();
+            string itemCode = textBox1.Text.Trim();
             string category = comboBox1.SelectedItem?.ToString();
             string expiryDate = dateTimePicker1.Value.ToString("yyyy-MM-dd");
             string manufactureDate = dateTimePicker2.Value.ToString("yyyy-MM-dd");
@@ -99,9 +126,9 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            if (!double.TryParse(textBox3.Text, out grossAmount) ||
-                !double.TryParse(textBox4.Text, out netAmount) ||
-                !int.TryParse(textBox5.Text, out quantity))
+            if (!double.TryParse(textBox2.Text, out grossAmount) ||
+                !double.TryParse(textBox3.Text, out netAmount) ||
+                !int.TryParse(textBox4.Text, out quantity))
             {
                 MessageBox.Show("Invalid numeric values. Please enter valid numbers.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -127,37 +154,15 @@ namespace DSA_SuperMarket_Management_System
             {
                 itemArray.Update(index, updatedItem);
             }
-
             itemBST.InsertKey(updatedItem);
-
             UpdateDatabase(updatedItem);
+       
 
             MessageBox.Show("Item updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
+
+
         }
-
-        private void DebugPrintDataStructures()
-        {
-            Console.WriteLine("===== Debug: Checking Data Structures =====");
-
-            Console.WriteLine("BST Items:");
-            itemBST.PrintTree(); // Make sure `PrintTree()` prints all elements in BST
-
-            Console.WriteLine("Linked List Items:");
-            Node<Item> current = itemList.Head;
-            while (current != null)
-            {
-                Console.WriteLine($"Linked List Item: {current.Data.ItemCode}");
-                current = current.Next;
-            }
-
-            Console.WriteLine("Dynamic Array Items:");
-            for (int i = 0; i < itemArray.Count; i++)
-            {
-                Console.WriteLine($"Dynamic Array Item: {itemArray.GetAt(i).ItemCode}");
-            }
-        }
-
 
         private void UpdateDatabase(Item updatedItem)
         {
@@ -184,3 +189,4 @@ namespace DSA_SuperMarket_Management_System
         }
     }
 }
+

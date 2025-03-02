@@ -69,6 +69,7 @@
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(249, 27);
             this.textBox5.TabIndex = 34;
+            this.textBox5.TextChanged += new System.EventHandler(this.textBox5_TextChanged);
             // 
             // label7
             // 
@@ -267,6 +268,7 @@
             this.guna2Button2.Size = new System.Drawing.Size(398, 45);
             this.guna2Button2.TabIndex = 39;
             this.guna2Button2.Text = "Edit";
+            this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click_1);
             // 
             // FormItemEdit
             // 

@@ -159,7 +159,7 @@ namespace DSA_SuperMarket_Management_System
         }
 
 
-        private void LoadItemsToGrid()
+        public void LoadItemsToGrid()
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
@@ -244,6 +244,8 @@ namespace DSA_SuperMarket_Management_System
         {
             FormItemEdit formItemEdit = new FormItemEdit(itemBST, itemList, itemArray);
             formItemEdit.ShowDialog();
+            LoadItemsToGrid();
+            LoadItemsToDataStructures();
         }
 
     }
