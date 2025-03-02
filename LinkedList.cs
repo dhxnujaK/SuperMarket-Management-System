@@ -189,12 +189,12 @@ namespace DSA_SuperMarket_Management_System
             return false;
         }
 
-        public bool Remove(T item)
+        public bool Remove(Func<T, bool> predicate)
         {
             Node<T>? currentNode = Head;
             while (currentNode != null)
             {
-                if (EqualityComparer<T>.Default.Equals(currentNode.Data, item))
+                if (predicate(currentNode.Data)) // Use predicate to match item
                 {
                     if (currentNode.Previous != null)
                     {
@@ -221,6 +221,7 @@ namespace DSA_SuperMarket_Management_System
             }
             return false;
         }
+
 
         // Print all elements of the linked list
         public void Print()
