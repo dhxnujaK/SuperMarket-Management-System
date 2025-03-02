@@ -62,7 +62,7 @@ namespace DSA_SuperMarket_Management_System
             }
 
             User updatedUser = new User(currentUser.Id, name, currentUser.NIC, contactNumber);
-            userList.Update(user => user.NIC == currentUser.NIC, updatedUser); // Using new Update method
+            userList.Update(user => user.NIC == currentUser.NIC, updatedUser);
             UpdateDatabase(updatedUser);
             
 
@@ -70,7 +70,7 @@ namespace DSA_SuperMarket_Management_System
             this.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e) // Delete Button
+        private void button3_Click(object sender, EventArgs e) 
         {
             if (currentUser == null)
             {
@@ -81,7 +81,8 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                userList.Remove(currentUser);
+                
+                userList.Remove(x => x.NIC.Equals(currentUser.NIC, StringComparison.OrdinalIgnoreCase));
                 DeleteFromDatabase(currentUser.NIC);
                 
 
