@@ -57,7 +57,12 @@ namespace DSA_SuperMarket_Management_System
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Adding scrollbars for the DataGridView
+            dataGridView1.ScrollBars = ScrollBars.Both; // Enables both vertical and horizontal scrollbars
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells; // Adjust row height as needed
         }
+
 
         private void CustomizeUI()
         {
