@@ -272,7 +272,7 @@
             this.guna2Button2.Name = "guna2Button2";
             this.guna2Button2.Size = new System.Drawing.Size(398, 45);
             this.guna2Button2.TabIndex = 39;
-            this.guna2Button2.Text = "Edit";
+            this.guna2Button2.Text = "Save";
             this.guna2Button2.Click += new System.EventHandler(this.guna2Button2_Click_1);
             // 
             // guna2Button3
@@ -304,7 +304,7 @@
             this.guna2Button4.Name = "guna2Button4";
             this.guna2Button4.Size = new System.Drawing.Size(398, 45);
             this.guna2Button4.TabIndex = 41;
-            this.guna2Button4.Text = "Cancel";
+            this.guna2Button4.Text = "Go Back";
             this.guna2Button4.Click += new System.EventHandler(this.guna2Button4_Click);
             // 
             // label10

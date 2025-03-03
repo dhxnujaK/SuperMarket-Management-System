@@ -191,7 +191,7 @@ namespace DSA_SuperMarket_Management_System
             }
 
             stopwatch.Stop(); // Stop timing
-            long elapsedTime = stopwatch.ElapsedMilliseconds; // Get time taken
+            double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
 
             // Update all data structures
             itemBST.Delete(currentItem);
@@ -205,7 +205,7 @@ namespace DSA_SuperMarket_Management_System
 
             UpdateDatabase(updatedItem);
 
-            MessageBox.Show($"Item updated successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime} ms",
+            MessageBox.Show($"Item updated successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime:F6} ms",
                 "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
@@ -279,7 +279,7 @@ namespace DSA_SuperMarket_Management_System
                 }
 
                 stopwatch.Stop(); // Stop timing
-                long elapsedTime = stopwatch.ElapsedMilliseconds; // Get time taken
+                double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
 
                 // Delete from all data structures
                 itemBST.Delete(currentItem);
@@ -293,7 +293,7 @@ namespace DSA_SuperMarket_Management_System
                 // Delete from database
                 DeleteFromDatabase(currentItem.ItemCode);
 
-                MessageBox.Show($"Item deleted successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime} ms",
+                MessageBox.Show($"Item deleted successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime:F6} ms",
                     "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
