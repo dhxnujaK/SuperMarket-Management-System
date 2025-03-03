@@ -261,10 +261,11 @@ namespace DSA_SuperMarket_Management_System
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormUserSort sortForm = new FormUserSort();
-            sortForm.ShowDialog();
-            LoadUserData();
+            FormUserSort sortForm = new FormUserSort(userBST, userList, userArray);
+            sortForm.ShowDialog(); // Show sorting form
+            LoadUserData(); // Reload updated data
         }
+
 
 
 

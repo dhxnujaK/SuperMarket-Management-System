@@ -11,13 +11,16 @@ namespace DSA_SuperMarket_Management_System
     public partial class FormUserSort : Form
     {
         private string connectionString = "Data Source=UserDatabase.db;Version=3;";
-        private BinarySearchTree<User> userBST = new BinarySearchTree<User>();
-        private sLinkedList<User> userList = new sLinkedList<User>();
-        private DArray<User> userArray = new DArray<User>();
+        private BinarySearchTree<User> userBST;
+        private sLinkedList<User> userList;
+        private DArray<User> userArray;
 
-        public FormUserSort()
+        public FormUserSort(BinarySearchTree<User> bst, sLinkedList<User> list, DArray<User> array)
         {
             InitializeComponent();
+            userBST = bst;
+            userList = list;
+            userArray = array;
 
             // Populate Sorting Algorithms
             comboBox1.Items.Add("QuickSort");
@@ -30,26 +33,12 @@ namespace DSA_SuperMarket_Management_System
             comboBox2.Items.Add("Id");
             comboBox2.Items.Add("Name");
             comboBox2.Items.Add("NIC");
-            comboBox2.Items.Add("Contact Number");
+            comboBox2.Items.Add("ContactNumber");
 
             // Populate Data Structures
             comboBox3.Items.Add("Dynamic Array");
             comboBox3.Items.Add("Linked List");
             comboBox3.Items.Add("Binary Search Tree");
-
-            LoadUsersIntoDataStructures();
-        }
-
-        private void LoadUsersIntoDataStructures()
-        {
-            List<User> users = LoadUsersFromDatabase();
-
-            foreach (var user in users)
-            {
-                userBST.InsertKey(user);
-                userList.AddLast(user);
-                userArray.Add(user);
-            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -83,47 +72,22 @@ namespace DSA_SuperMarket_Management_System
             this.Close();
         }
 
-        private void SortWithKey<TValue>(List<User> users, string algorithm, Func<User, TValue> keySelector) where TValue : IComparable<TValue>
-        {
-            switch (algorithm)
-            {
-                case "QuickSort":
-                    new QuickSort().Sort(users, keySelector);
-                    break;
-                case "MergeSort":
-                    new MergeSort().Sort(users, keySelector);
-                    break;
-                case "InsertionSort":
-                    new InsertionSort().Sort(users, keySelector);
-                    break;
-                case "SelectionSort":
-                    new SelectionSort().Sort(users, keySelector);
-                    break;
-                case "BubbleSort":
-                    new BubbleSort().Sort(users, keySelector);
-                    break;
-            }
-        }
-
         private void SortUsers(List<User> users, string algorithm, string column)
         {
             switch (column)
             {
                 case "Id":
-                    SortWithKey(users, algorithm, user => user.Id);
+                    users.Sort((x, y) => x.Id.CompareTo(y.Id));
                     break;
                 case "Name":
-                    SortWithKey(users, algorithm, user => user.Name);
+                    users.Sort((x, y) => x.Name.CompareTo(y.Name));
                     break;
                 case "NIC":
-                    SortWithKey(users, algorithm, user => user.NIC);
+                    users.Sort((x, y) => x.NIC.CompareTo(y.NIC));
                     break;
-                case "Contact Number":
-                    SortWithKey(users, algorithm, user => user.ContactNumber);
+                case "ContactNumber":
+                    users.Sort((x, y) => x.ContactNumber.CompareTo(y.ContactNumber));
                     break;
-                default:
-                    MessageBox.Show("Invalid column selected.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
             }
         }
 
@@ -150,14 +114,12 @@ namespace DSA_SuperMarket_Management_System
                 {
                     try
                     {
-                        // Clear existing table to reinsert sorted data
                         string deleteQuery = "DELETE FROM Users";
                         using (SQLiteCommand deleteCmd = new SQLiteCommand(deleteQuery, conn))
                         {
                             deleteCmd.ExecuteNonQuery();
                         }
 
-                        // Reinsert users in sorted order
                         string insertQuery = "INSERT INTO Users (Id, Name, NIC, ContactNumber) VALUES (@id, @name, @nic, @contact)";
                         using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
                         {
@@ -173,7 +135,6 @@ namespace DSA_SuperMarket_Management_System
                         }
 
                         transaction.Commit();
-                        MessageBox.Show("Database updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
@@ -182,32 +143,6 @@ namespace DSA_SuperMarket_Management_System
                     }
                 }
             }
-        }
-
-
-        private List<User> LoadUsersFromDatabase()
-        {
-            List<User> users = new List<User>();
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
-            {
-                conn.Open();
-                string query = "SELECT Id, Name, NIC, ContactNumber FROM Users";
-                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
-                using (SQLiteDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        users.Add(new User
-                        {
-                            Id = reader.GetInt32(0),
-                            Name = reader.GetString(1),
-                            NIC = reader.GetString(2),
-                            ContactNumber = reader.GetString(3)
-                        });
-                    }
-                }
-            }
-            return users;
         }
 
         private List<User> ConvertDArrayToList(DArray<User> array)
@@ -236,7 +171,6 @@ namespace DSA_SuperMarket_Management_System
         {
             return bst.GetSortedList();
         }
-
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) { }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) { }
@@ -244,5 +178,4 @@ namespace DSA_SuperMarket_Management_System
         private void label1_Click(object sender, EventArgs e) { }
         private void label2_Click(object sender, EventArgs e) { }
     }
-
 }
