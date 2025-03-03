@@ -262,13 +262,15 @@ namespace DSA_SuperMarket_Management_System
         private void button3_Click(object sender, EventArgs e)
         {
             FormUserSort sortForm = new FormUserSort(userBST, userList, userArray);
-            sortForm.ShowDialog(); // Show sorting form
 
-            // 🔹 Force database reload after sorting
-            LoadUserData();
-            dataGridView1.Refresh();
-            dataGridView1.Update();
-           
+            // 🔹 Subscribe to SortingCompleted event
+            sortForm.SortingCompleted += (sortedUsers) =>
+            {
+                dataGridView1.DataSource = sortedUsers;
+                dataGridView1.Refresh();
+            };
+
+            sortForm.ShowDialog();
 
         }
 

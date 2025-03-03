@@ -15,6 +15,9 @@ namespace DSA_SuperMarket_Management_System
         private sLinkedList<User> userList;
         private DArray<User> userArray;
 
+        // 🔹 Event to notify FormUser that sorting is completed
+        public event Action<List<User>> SortingCompleted;
+
         public FormUserSort(BinarySearchTree<User> bst, sLinkedList<User> list, DArray<User> array)
         {
             InitializeComponent();
@@ -69,6 +72,10 @@ namespace DSA_SuperMarket_Management_System
             UpdateDatabase(users);
 
             MessageBox.Show($"Sorting Completed!\nTime Taken: {stopwatch.ElapsedMilliseconds} ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // 🔹 Trigger the event to notify FormUser
+            SortingCompleted?.Invoke(users);
+
             this.Close();
         }
 
@@ -89,15 +96,7 @@ namespace DSA_SuperMarket_Management_System
                     users.Sort((x, y) => x.ContactNumber.CompareTo(y.ContactNumber));
                     break;
             }
-
-            /*//  Debugging: Print the sorted list to console
-            Console.WriteLine("Sorted Users:");
-            foreach (var user in users)
-            {
-                Console.WriteLine($"{user.Id} - {user.Name} - {user.NIC} - {user.ContactNumber}");
-            }*/
         }
-
 
         private void UpdateDataStructures(List<User> sortedUsers)
         {
@@ -113,12 +112,7 @@ namespace DSA_SuperMarket_Management_System
                 userList.AddLast(user);
                 userBST.InsertKey(user);
             }
-
-            // 🔹 Ensure that all data structures are updated and reflect the sorted order.
-            Console.WriteLine("Data structures updated with sorted data!"); // 🔹 Debugging log
         }
-
-
 
         private void UpdateDatabase(List<User> sortedUsers)
         {
@@ -126,24 +120,16 @@ namespace DSA_SuperMarket_Management_System
             {
                 conn.Open();
 
-                // 🔹 Ensure PRAGMA runs BEFORE starting the transaction
-                using (SQLiteCommand pragmaCmd = new SQLiteCommand("PRAGMA synchronous = FULL;", conn))
-                {
-                    pragmaCmd.ExecuteNonQuery();
-                }
-
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     try
                     {
-                        // 🔹 Clear existing table before inserting sorted data
                         string deleteQuery = "DELETE FROM Users";
                         using (SQLiteCommand deleteCmd = new SQLiteCommand(deleteQuery, conn, transaction))
                         {
                             deleteCmd.ExecuteNonQuery();
                         }
 
-                        // 🔹 Reinsert users in sorted order
                         string insertQuery = "INSERT INTO Users (Id, Name, NIC, ContactNumber) VALUES (@id, @name, @nic, @contact)";
                         using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn, transaction))
                         {
@@ -159,7 +145,6 @@ namespace DSA_SuperMarket_Management_System
                         }
 
                         transaction.Commit();
-                        MessageBox.Show("Database updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
@@ -169,9 +154,6 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
-
-
-
 
         private List<User> ConvertDArrayToList(DArray<User> array)
         {
@@ -199,6 +181,7 @@ namespace DSA_SuperMarket_Management_System
         {
             return bst.GetSortedList();
         }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e) { }
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e) { }
         private void comboBox3_SelectedIndexChanged(object sender, EventArgs e) { }
