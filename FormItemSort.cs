@@ -5,6 +5,7 @@ using System.Data.SQLite;
 using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
+using System.Diagnostics;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -66,13 +67,16 @@ namespace DSA_SuperMarket_Management_System
             }
 
             // Perform Sorting
+            Stopwatch stopwatch = Stopwatch.StartNew(); // Start measuring time
             SortItems(items, selectedAlgorithm, selectedColumn);
+            stopwatch.Stop(); // Stop measuring time
 
             // Update Data Structures and Database
             UpdateDataStructures(items);
             UpdateDatabase(items);
 
-            MessageBox.Show("Items sorted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Sorting Completed!\nTime Taken: {stopwatch.ElapsedMilliseconds} ms",
+       "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
