@@ -42,7 +42,7 @@ namespace DSA_SuperMarket_Management_System
             Console.WriteLine();
         }
 
-        public List<T> GetSortedList()
+        /*public List<T> GetSortedList()
         {
             List<T> sortedList = new List<T>();
             InOrderTraversal(root, sortedList);
@@ -55,7 +55,7 @@ namespace DSA_SuperMarket_Management_System
             InOrderTraversal(node.left, result);
             result.Add(node.Data); // Add data in sorted order
             InOrderTraversal(node.right, result);
-        }
+        }*/
 
         public void PrintPreorderTree()
         {
