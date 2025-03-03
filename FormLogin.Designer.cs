@@ -39,12 +39,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Stencil", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(96, 105);
+            this.label1.Font = new System.Drawing.Font("Algerian", 22.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(116, 106);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(713, 44);
+            this.label1.Size = new System.Drawing.Size(708, 41);
             this.label1.TabIndex = 0;
-            this.label1.Text = "SUPERMARKET MANaGEMENT SYSTEM";
+            this.label1.Text = "SUPERMARKET MANAGEMENT SYSTEM";
             // 
             // label2
             // 
