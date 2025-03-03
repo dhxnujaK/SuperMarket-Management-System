@@ -25,7 +25,7 @@ namespace DSA_SuperMarket_Management_System
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(240, 240, 240);
+            this.BackColor = Color.FromArgb(173, 216, 230); 
 
             ApplyShadow();
             CreateCustomTitleBar();
@@ -42,7 +42,7 @@ namespace DSA_SuperMarket_Management_System
         {
             titleBar = new Guna2Panel
             {
-                Height = 50,
+                Height = 100,
                 Dock = DockStyle.Top,
                 BackColor = Color.Navy,
                 BorderRadius = 5
@@ -51,9 +51,9 @@ namespace DSA_SuperMarket_Management_System
 
             Guna2HtmlLabel titleLabel = new Guna2HtmlLabel
             {
-                Text = "SuperMarket Management",
+                Text = "Super Market Management",
                 ForeColor = Color.White,
-                Font = new Font("Segoe UI", 14, FontStyle.Bold),
+                Font = new Font("Segoe UI", 35, FontStyle.Bold),
                 AutoSize = true,
                 Location = new Point(15, 15)
             };
