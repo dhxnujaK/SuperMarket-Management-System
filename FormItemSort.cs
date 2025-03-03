@@ -57,14 +57,25 @@ namespace DSA_SuperMarket_Management_System
             string selectedAlgorithm = comboBox1.SelectedItem.ToString();
             string selectedColumn = comboBox2.SelectedItem.ToString();
 
-            // Get data from LinkedList (or another structure)
+            // Select Data Structure to Sort
             List<Item> items = new List<Item>();
-            Node<Item> current = itemList.Head;
-            while (current != null)
+
+            switch (comboBox3.SelectedItem.ToString())
             {
-                items.Add(current.Data);
-                current = current.Next;
+                case "Dynamic Array":
+                    items = ConvertDArrayToList(itemArray);
+                    break;
+                case "Linked List":
+                    items = ConvertLinkedListToList(itemList);
+                    break;
+                case "Binary Search Tree":
+                    items = ConvertBSTToList(itemBST);
+                    break;
+                default:
+                    MessageBox.Show("Please select a valid data structure.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
             }
+
 
             // Perform Sorting
             Stopwatch stopwatch = Stopwatch.StartNew(); // Start measuring time
@@ -174,17 +185,42 @@ namespace DSA_SuperMarket_Management_System
 
         private void UpdateDataStructures(List<Item> sortedItems)
         {
-            itemBST = new BinarySearchTree<Item>();
-            itemList = new sLinkedList<Item>();
-            itemArray = new DArray<Item>();
+            switch (comboBox3.SelectedItem.ToString())
+            {
+                case "Dynamic Array":
+                    itemArray = new DArray<Item>();
+                    foreach (var item in sortedItems)
+                    {
+                        itemArray.Add(item);
+                    }
+                    break;
 
+                case "Linked List":
+                    itemList = new sLinkedList<Item>();
+                    foreach (var item in sortedItems)
+                    {
+                        itemList.AddLast(item);
+                    }
+                    break;
+
+                case "Binary Search Tree":
+                    itemBST = new BinarySearchTree<Item>();
+                    foreach (var item in sortedItems)
+                    {
+                        itemBST.InsertKey(item);
+                    }
+                    break;
+            }
+
+            // Ensure sorted data is copied to all data structures
             foreach (var item in sortedItems)
             {
-                itemBST.InsertKey(item);
-                itemList.AddLast(item);
                 itemArray.Add(item);
+                itemList.AddLast(item);
+                itemBST.InsertKey(item);
             }
         }
+
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -228,7 +264,35 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
+        private List<Item> ConvertDArrayToList(DArray<Item> array)
+        {
+            List<Item> list = new List<Item>();
+            for (int i = 0; i < array.Count; i++)
+            {
+                list.Add(array.GetAt(i));
+            }
+            return list;
+        }
+        private List<Item> ConvertLinkedListToList(sLinkedList<Item> linkedList)
+        {
+            List<Item> list = new List<Item>();
+            Node<Item>? current = linkedList.Head;
+            while (current != null)
+            {
+                list.Add(current.Data);
+                current = current.Next;
+            }
+            return list;
+        }
+        private List<Item> ConvertBSTToList(BinarySearchTree<Item> bst)
+        {
+            return bst.GetSortedList(); 
+        }
 
 
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //button1_Click(sender, e);
+        }
     }
 }

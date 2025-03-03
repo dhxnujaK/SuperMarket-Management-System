@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -153,8 +154,21 @@ namespace DSA_SuperMarket_Management_System
 
             return null; // Return null if T is not an Item type
         }
+        public List<T> GetSortedList()
+        {
+            List<T> sortedList = new List<T>();
+            InOrderTraversal(root, sortedList);
+            return sortedList;
+        }
 
-        
+        private void InOrderTraversal(TreeNode<T>? node, List<T> result)
+        {
+            if (node == null) return;
+            InOrderTraversal(node.left, result);
+            result.Add(node.Data); // Add data in sorted order
+            InOrderTraversal(node.right, result);
+        }
+
 
         private void PrintInOrder(TreeNode<T>? node)
         {
