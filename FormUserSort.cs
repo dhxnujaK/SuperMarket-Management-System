@@ -89,39 +89,63 @@ namespace DSA_SuperMarket_Management_System
                     users.Sort((x, y) => x.ContactNumber.CompareTo(y.ContactNumber));
                     break;
             }
+
+            /*//  Debugging: Print the sorted list to console
+            Console.WriteLine("Sorted Users:");
+            foreach (var user in users)
+            {
+                Console.WriteLine($"{user.Id} - {user.Name} - {user.NIC} - {user.ContactNumber}");
+            }*/
         }
+
 
         private void UpdateDataStructures(List<User> sortedUsers)
         {
+            // First, clear all existing data structures
             userArray = new DArray<User>();
             userList = new sLinkedList<User>();
             userBST = new BinarySearchTree<User>();
 
+            // Add sorted users back into all the data structures
             foreach (var user in sortedUsers)
             {
                 userArray.Add(user);
                 userList.AddLast(user);
                 userBST.InsertKey(user);
             }
+
+            // 🔹 Ensure that all data structures are updated and reflect the sorted order.
+            Console.WriteLine("Data structures updated with sorted data!"); // 🔹 Debugging log
         }
+
+
 
         private void UpdateDatabase(List<User> sortedUsers)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
                 conn.Open();
+
+                // 🔹 Ensure PRAGMA runs BEFORE starting the transaction
+                using (SQLiteCommand pragmaCmd = new SQLiteCommand("PRAGMA synchronous = FULL;", conn))
+                {
+                    pragmaCmd.ExecuteNonQuery();
+                }
+
                 using (SQLiteTransaction transaction = conn.BeginTransaction())
                 {
                     try
                     {
+                        // 🔹 Clear existing table before inserting sorted data
                         string deleteQuery = "DELETE FROM Users";
-                        using (SQLiteCommand deleteCmd = new SQLiteCommand(deleteQuery, conn))
+                        using (SQLiteCommand deleteCmd = new SQLiteCommand(deleteQuery, conn, transaction))
                         {
                             deleteCmd.ExecuteNonQuery();
                         }
 
+                        // 🔹 Reinsert users in sorted order
                         string insertQuery = "INSERT INTO Users (Id, Name, NIC, ContactNumber) VALUES (@id, @name, @nic, @contact)";
-                        using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
+                        using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn, transaction))
                         {
                             foreach (var user in sortedUsers)
                             {
@@ -135,6 +159,7 @@ namespace DSA_SuperMarket_Management_System
                         }
 
                         transaction.Commit();
+                        MessageBox.Show("Database updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     catch (Exception ex)
                     {
@@ -144,6 +169,9 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
+
+
+
 
         private List<User> ConvertDArrayToList(DArray<User> array)
         {
