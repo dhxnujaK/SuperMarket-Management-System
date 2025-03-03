@@ -236,7 +236,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FormUserEdit1 editForm = new FormUserEdit1(userList);
+            FormUserEdit1 editForm = new FormUserEdit1(userList,userBST,userArray);
             editForm.ShowDialog();
             LoadUserData();
         }

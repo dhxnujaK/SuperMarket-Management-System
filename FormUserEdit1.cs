@@ -7,6 +7,8 @@ namespace DSA_SuperMarket_Management_System
     public partial class FormUserEdit1 : Form
     {
         private sLinkedList<User> userList;
+        private BinarySearchTree<User> userBST;
+        private DArray<User> userArray;
         private string connectionString = "Data Source=UserDatabase.db;Version=3;";
         private User currentUser;
 
@@ -15,10 +17,12 @@ namespace DSA_SuperMarket_Management_System
             InitializeComponent();
         }
 
-        public FormUserEdit1(sLinkedList<User> userList)
+        public FormUserEdit1(sLinkedList<User> userList, BinarySearchTree<User> userBST, DArray<User> userArray)
         {
             InitializeComponent();
             this.userList = userList;
+            this.userBST = userBST;
+            this.userArray = userArray;
         }
 
         private void button1_Click(object sender, EventArgs e) // Search Button
@@ -30,7 +34,8 @@ namespace DSA_SuperMarket_Management_System
                 return;
             }
 
-            currentUser = userList.Find(user => user.NIC == nic);
+            currentUser = userList.Find(user => user.NIC == nic) ?? userBST.Search(nic)?.Data ?? userArray.SearchItem(user => user.NIC == nic);
+
             if (currentUser != null)
             {
                 textBox2.Text = currentUser.Name;
@@ -66,15 +71,25 @@ namespace DSA_SuperMarket_Management_System
             }
 
             User updatedUser = new User(currentUser.Id, name, newNIC, contactNumber);
-            userList.Remove(user => user.NIC == oldNIC); // Remove old user
-            userList.AddLast(updatedUser); // Add updated user
+
+            // Remove old user from all data structures
+            userList.Remove(user => user.NIC == oldNIC);
+            userBST.Delete(currentUser);
+            int index = userArray.Find(user => user.NIC == oldNIC);
+            if (index != -1) userArray.RemoveAt(index);
+
+            // Add updated user
+            userList.AddLast(updatedUser);
+            userBST.InsertKey(updatedUser);
+            userArray.Add(updatedUser);
+
             UpdateDatabase(oldNIC, updatedUser);
 
             MessageBox.Show("User updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e) // Delete Button
         {
             if (currentUser == null)
             {
@@ -85,7 +100,11 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                userList.Remove(user => user.NIC == currentUser.NIC); // Remove user
+                userList.Remove(user => user.NIC == currentUser.NIC);
+                userBST.Delete(currentUser);
+                int index = userArray.Find(user => user.NIC == currentUser.NIC);
+                if (index != -1) userArray.RemoveAt(index);
+
                 DeleteFromDatabase(currentUser.NIC);
 
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -134,26 +153,6 @@ namespace DSA_SuperMarket_Management_System
         private void FormUserEdit1_Load(object sender, EventArgs e)
         {
             // Any required initialization when form loads
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
         }
     }
 }
