@@ -176,6 +176,7 @@
             this.Controls.Add(this.textBox1);
             this.Name = "FormUser";
             this.Text = "FormUser";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormUser_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);

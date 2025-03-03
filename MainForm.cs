@@ -145,29 +145,43 @@ namespace DSA_SuperMarket_Management_System
             toggleDarkMode.Text = isDarkMode ? "☼" : "☾";
         }
 
-        private void btnItems_Click(object sender, EventArgs e)
+        private async void btnItems_Click(object sender, EventArgs e)
         {
+            FormLoading loadingScreen = new FormLoading();
+            await loadingScreen.ShowLoadingScreen(1000); // Properly wait for animation
+
+            this.Hide();
             FormItem formItem = new FormItem();
             this.Hide();
             formItem.ShowDialog();
             this.Show();
         }
 
-        private void btnUsers_Click(object sender, EventArgs e)
+
+
+        private async void btnUsers_Click(object sender, EventArgs e)
         {
+            FormLoading loadingScreen = new FormLoading();
+            await loadingScreen.ShowLoadingScreen(1000); // Properly wait for animation
+
+            this.Hide();
             FormUser formUser = new FormUser();
             this.Hide();
             formUser.ShowDialog();
             this.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        /*private async void button1_Click(object sender, EventArgs e)
         {
+            FormLoading loadingScreen = new FormLoading();
+            loadingScreen.ShowLoadingScreen(2000); // Show for 2 seconds
+
+            await Task.Delay(2000); 
             FormItem formItem = new FormItem();
             this.Hide();
             formItem.ShowDialog();
             this.Show();
-        }
+        }*/
 
         private void label2_Click(object sender, EventArgs e)
         {
