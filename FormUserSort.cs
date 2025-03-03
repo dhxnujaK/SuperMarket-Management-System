@@ -102,6 +102,31 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Handle sorting selection change
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Handle column selection change
+        }
+
+        private void comboBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Handle another selection change
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            // Handle label click if needed
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+            // Handle label click if needed
+        }
+
         private void UpdateDataStructures(List<User> sortedUsers)
         {
             userArray = new DArray<User>();

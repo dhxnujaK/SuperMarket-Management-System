@@ -41,12 +41,6 @@
             // 
             this.comboBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Bubble Sort",
-            "Selection Sort",
-            "Insertion Sort",
-            "Merge Sort",
-            "Quick Sort"});
             this.comboBox1.Location = new System.Drawing.Point(350, 46);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(361, 28);
@@ -57,11 +51,6 @@
             // 
             this.comboBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "Id",
-            "Name",
-            "NIC",
-            "Contact Number"});
             this.comboBox2.Location = new System.Drawing.Point(350, 112);
             this.comboBox2.Name = "comboBox2";
             this.comboBox2.Size = new System.Drawing.Size(361, 28);
@@ -105,10 +94,6 @@
             // 
             this.comboBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Items.AddRange(new object[] {
-            "Linked List",
-            "Binary Search Tree",
-            "Dynamic Array"});
             this.comboBox3.Location = new System.Drawing.Point(350, 181);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(361, 28);

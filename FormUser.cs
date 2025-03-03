@@ -250,10 +250,11 @@ namespace DSA_SuperMarket_Management_System
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormUserSort editForm = new FormUserSort(); 
+            FormUserSort editForm = new FormUserSort(userBST, userList, userArray);
             editForm.ShowDialog();
             LoadUserData();
         }
+
 
     }
 }

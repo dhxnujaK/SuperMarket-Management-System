@@ -154,5 +154,31 @@ namespace DSA_SuperMarket_Management_System
         {
             // Any required initialization when form loads
         }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+            // Handle label click if needed
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            // Handle text change if needed
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            // Handle text change if needed
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            // Handle text change if needed
+        }
+
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            // Handle text change if needed
+        }
+
     }
 }
