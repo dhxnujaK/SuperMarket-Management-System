@@ -100,17 +100,24 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
+                // 🔹 Remove user from all data structures
                 userList.Remove(user => user.NIC == currentUser.NIC);
                 userBST.Delete(currentUser);
                 int index = userArray.Find(user => user.NIC == currentUser.NIC);
                 if (index != -1) userArray.RemoveAt(index);
 
+                // 🔹 Remove from database
                 DeleteFromDatabase(currentUser.NIC);
+
+                // 🔹 Refresh the UI in FormUser after deletion
+                //FormUser parentForm = (FormUser)Application.OpenForms["FormUser"];
+                //parentForm?.LoadUserData();
 
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }
+
 
         private void UpdateDatabase(string oldNIC, User updatedUser)
         {
@@ -144,6 +151,7 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
+
 
         private void button4_Click(object sender, EventArgs e)
         {

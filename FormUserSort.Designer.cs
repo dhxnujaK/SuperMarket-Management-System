@@ -124,6 +124,7 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "FormUserSort";
             this.Text = "FormUserSort";
+            this.Load += new System.EventHandler(this.FormUserSort_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

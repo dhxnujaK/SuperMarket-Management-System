@@ -161,6 +161,15 @@ namespace DSA_SuperMarket_Management_System
                         command.ExecuteNonQuery();
                     }
 
+                    // 🔹 Retrieve the last inserted ID
+                    int userId = (int)connection.LastInsertRowId;
+
+                    // 🔹 Add the new user to all data structures
+                    User newUser = new User(userId, name, nic, contactNumber);
+                    userBST.InsertKey(newUser);
+                    userList.AddLast(newUser);
+                    userArray.Add(newUser);
+
                     MessageBox.Show("User saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                     LoadUserData();
@@ -182,6 +191,7 @@ namespace DSA_SuperMarket_Management_System
                 }
             }
         }
+
 
         private bool IsValidNIC(string nic)
         {
@@ -236,10 +246,11 @@ namespace DSA_SuperMarket_Management_System
 
         private void button2_Click(object sender, EventArgs e)
         {
-            FormUserEdit1 editForm = new FormUserEdit1(userList,userBST,userArray);
+            FormUserEdit1 editForm = new FormUserEdit1(userList, userBST, userArray);
             editForm.ShowDialog();
             LoadUserData();
         }
+
 
 
 
@@ -250,10 +261,11 @@ namespace DSA_SuperMarket_Management_System
 
         private void button3_Click(object sender, EventArgs e)
         {
-            FormUserSort editForm = new FormUserSort(userBST, userList, userArray);
-            editForm.ShowDialog();
+            FormUserSort sortForm = new FormUserSort();
+            sortForm.ShowDialog();
             LoadUserData();
         }
+
 
 
     }
