@@ -274,9 +274,9 @@ namespace DSA_SuperMarket_Management_System
 
         }
 
-
-
-
-
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
