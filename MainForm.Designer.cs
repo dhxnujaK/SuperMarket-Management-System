@@ -1,6 +1,6 @@
 ﻿namespace DSA_SuperMarket_Management_System
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
