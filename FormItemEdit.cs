@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using System.Data.SQLite;
+using System.Diagnostics;
 
 namespace DSA_SuperMarket_Management_System
 {
@@ -36,44 +37,59 @@ namespace DSA_SuperMarket_Management_System
                 MessageBox.Show("Please enter an Item Code to search.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            //DebugPrintDataStructures();
+            //DebugPrintDataStructures();       
+
+            string selectedDataStructure = comboBox2.SelectedItem?.ToString();
+            Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
 
             currentItem = null;
 
-            var bstNode = itemBST.Search(searchCode);
-            if (bstNode != null && bstNode.Data != null && bstNode.Data.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase))
+            switch (selectedDataStructure)
             {
-                currentItem = bstNode.Data;
+                case "Binary Search Tree":
+                    var bstNode = itemBST.Search(searchCode);
+                    if (bstNode != null && bstNode.Data != null)
+                    {
+                        currentItem = bstNode.Data;
+                    }
+                    break;
+
+                case "Linked List":
+                    currentItem = itemList.Find(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
+                    break;
+
+                case "Dynamic Array":
+                    currentItem = itemArray.SearchItem(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
+                    break;
+
+                default:
+                    MessageBox.Show("Please select a valid data structure.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
             }
 
-            if (currentItem == null)
-            {
-                currentItem = itemList.Find(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
-            }
-
-            if (currentItem == null)
-            {
-                currentItem = itemArray.SearchItem(x => x.ItemCode.Equals(searchCode, StringComparison.OrdinalIgnoreCase));
-            }
+            stopwatch.Stop(); // Stop timing
+            double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000; // Convert to milliseconds
 
             if (currentItem != null)
             {
-                textBox5.Text = currentItem.ItemName;          //Item Name
-                textBox1.Text = currentItem.ItemCode;          //Item Code 
-                comboBox1.SelectedItem = currentItem.Category; //Category
-                dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate); //Expiry Date
-                dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate); //Manufacture Date
-                textBox2.Text = currentItem.GrossAmount.ToString();  //Gross Amount
-                textBox3.Text = currentItem.NetAmount.ToString();    //✅ Net Amount
-                textBox4.Text = currentItem.Quantity.ToString();     //✅ Quantity 1
+                textBox5.Text = currentItem.ItemName;
+                textBox1.Text = currentItem.ItemCode;
+                comboBox1.SelectedItem = currentItem.Category;
+                dateTimePicker1.Value = DateTime.Parse(currentItem.ExpiryDate);
+                dateTimePicker2.Value = DateTime.Parse(currentItem.ManufactureDate);
+                textBox2.Text = currentItem.GrossAmount.ToString();
+                textBox3.Text = currentItem.NetAmount.ToString();
+                textBox4.Text = currentItem.Quantity.ToString();
+
+                MessageBox.Show($"Item found in {selectedDataStructure}!\nTime Taken: {elapsedTime:F6} ms",
+                    "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
-
-
             else
             {
                 MessageBox.Show("Item not found!", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
+
         }
 
         /*private void DebugPrintDataStructures()
@@ -146,22 +162,51 @@ namespace DSA_SuperMarket_Management_System
                 Quantity = quantity
             };
 
-            itemBST.Delete(currentItem);
-            itemList.Update(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase), updatedItem);
+            string selectedDataStructure = comboBox2.SelectedItem?.ToString();
+            Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
 
-
-            int index = itemArray.Find(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase));
-            if (index != -1)
+            // Sort only the selected data structure
+            switch (selectedDataStructure)
             {
-                itemArray.Update(index, updatedItem);
+                case "Binary Search Tree":
+                    itemBST.Delete(currentItem);
+                    itemBST.InsertKey(updatedItem);
+                    break;
+
+                case "Linked List":
+                    itemList.Update(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase), updatedItem);
+                    break;
+
+                case "Dynamic Array":
+                    int index = itemArray.Find(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase));
+                    if (index != -1)
+                    {
+                        itemArray.Update(index, updatedItem);
+                    }
+                    break;
+
+                default:
+                    MessageBox.Show("Please select a valid data structure.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
             }
+
+            stopwatch.Stop(); // Stop timing
+            long elapsedTime = stopwatch.ElapsedMilliseconds; // Get time taken
+
+            // Update all data structures
+            itemBST.Delete(currentItem);
             itemBST.InsertKey(updatedItem);
+            itemList.Update(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase), updatedItem);
+            int idx = itemArray.Find(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase));
+            if (idx != -1)
+            {
+                itemArray.Update(idx, updatedItem);
+            }
+
             UpdateDatabase(updatedItem);
-       
 
-            MessageBox.Show("Item updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            this.Close();
-
+            MessageBox.Show($"Item updated successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime} ms",
+                "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
@@ -206,23 +251,51 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this item?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                // Delete from data structures
+                string selectedDataStructure = comboBox2.SelectedItem?.ToString();
+                Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
+
+                // Delete only from the selected data structure
+                switch (selectedDataStructure)
+                {
+                    case "Binary Search Tree":
+                        itemBST.Delete(currentItem);
+                        break;
+
+                    case "Linked List":
+                        itemList.Remove(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
+                        break;
+
+                    case "Dynamic Array":
+                        int index = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
+                        if (index != -1)
+                        {
+                            itemArray.RemoveAt(index);
+                        }
+                        break;
+
+                    default:
+                        MessageBox.Show("Please select a valid data structure.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                }
+
+                stopwatch.Stop(); // Stop timing
+                long elapsedTime = stopwatch.ElapsedMilliseconds; // Get time taken
+
+                // Delete from all data structures
                 itemBST.Delete(currentItem);
                 itemList.Remove(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
-
-
-                int index = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
-                if (index != -1)
+                int idx = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
+                if (idx != -1)
                 {
-                    itemArray.RemoveAt(index);
+                    itemArray.RemoveAt(idx);
                 }
 
                 // Delete from database
                 DeleteFromDatabase(currentItem.ItemCode);
-              
 
-                MessageBox.Show("Item deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close();
+                MessageBox.Show($"Item deleted successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime} ms",
+                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
             }
         }
         private void DeleteFromDatabase(string itemCode)
@@ -240,6 +313,20 @@ namespace DSA_SuperMarket_Management_System
             }
         }
 
+        private void label10_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormItemEdit_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 
