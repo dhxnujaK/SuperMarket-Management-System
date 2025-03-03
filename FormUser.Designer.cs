@@ -102,13 +102,15 @@
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.DarkGreen;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(202, 472);
+            this.button1.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.button1.Location = new System.Drawing.Point(202, 349);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(196, 40);
             this.button1.TabIndex = 7;
             this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // dataGridView1
@@ -121,30 +123,33 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(770, 583);
+            this.dataGridView1.Size = new System.Drawing.Size(1452, 961);
             this.dataGridView1.TabIndex = 8;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.Maroon;
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.Location = new System.Drawing.Point(202, 412);
+            this.button2.ForeColor = System.Drawing.SystemColors.ButtonHighlight;
+            this.button2.Location = new System.Drawing.Point(202, 472);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(196, 41);
             this.button2.TabIndex = 9;
             this.button2.Text = "Edit";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
+            this.button3.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.Location = new System.Drawing.Point(202, 350);
+            this.button3.Location = new System.Drawing.Point(202, 410);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(196, 42);
             this.button3.TabIndex = 10;
             this.button3.Text = "Sort";
-            this.button3.UseVisualStyleBackColor = true;
+            this.button3.UseVisualStyleBackColor = false;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // button4
@@ -162,7 +167,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1242, 749);
+            this.ClientSize = new System.Drawing.Size(1924, 1055);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
