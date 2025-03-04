@@ -77,7 +77,7 @@ namespace DSA_SuperMarket_Management_System
         // Shrink the array to optimize memory usage
         private void Shrink()
         {
-            capacity = Math.Max(4, capacity / 2); // Prevent capacity from going below 4
+            capacity = Math.Max(4, capacity / 2); 
             T[] newArray = new T[capacity];
             Array.Copy(data, newArray, count);
             data = newArray;
@@ -93,15 +93,14 @@ namespace DSA_SuperMarket_Management_System
             return data[index];
         }
 
-        // Find an item (returns index, -1 if not found)
-        // Find the index of an item based on a condition (predicate)
+        
         public int Find(Func<T, bool> predicate)
         {
             for (int i = 0; i < count; i++)
             {
                 if (predicate(data[i]))
                 {
-                    return i;  // ✅ Return the index if found
+                    return i;  
                 }
             }
             return -1;  

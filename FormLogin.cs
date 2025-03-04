@@ -9,11 +9,11 @@ namespace DSA_SuperMarket_Management_System
         public FormLogin()
         {
             InitializeComponent();
-            this.FormBorderStyle = FormBorderStyle.None; // No window borders
-            this.WindowState = FormWindowState.Maximized; // Fullscreen
+            this.FormBorderStyle = FormBorderStyle.None; 
+            this.WindowState = FormWindowState.Maximized;
             this.BackColor = System.Drawing.Color.White;
 
-            // Parent Panel (For Centering)
+            
             Guna2Panel mainPanel = new Guna2Panel
             {
                 Dock = DockStyle.Fill,
@@ -21,7 +21,7 @@ namespace DSA_SuperMarket_Management_System
             };
             this.Controls.Add(mainPanel);
 
-            // Close Button (Top-Right)
+            
             Guna2Button btnClose = new Guna2Button
             {
                 Text = "X",
@@ -29,12 +29,12 @@ namespace DSA_SuperMarket_Management_System
                 Location = new System.Drawing.Point(this.ClientSize.Width - 50, 10),
                 FillColor = System.Drawing.Color.Red,
                 ForeColor = System.Drawing.Color.White,
-                Anchor = AnchorStyles.Top | AnchorStyles.Right // Ensures position even on resize
+                Anchor = AnchorStyles.Top | AnchorStyles.Right 
             };
             btnClose.Click += (sender, e) => { this.Close(); };
             mainPanel.Controls.Add(btnClose);
 
-            // Centering Panel (Holds Form Elements)
+            
             Guna2Panel centerPanel = new Guna2Panel
             {
                 Size = new System.Drawing.Size(400, 350),
@@ -46,11 +46,11 @@ namespace DSA_SuperMarket_Management_System
             };
             mainPanel.Controls.Add(centerPanel);
 
-            // Title Label
+            
 
 
 
-            // Username Field
+           
             Guna2TextBox txtUsername = new Guna2TextBox
             {
                 PlaceholderText = "Username",
@@ -58,7 +58,7 @@ namespace DSA_SuperMarket_Management_System
                 Margin = new Padding(0, 10, 0, 10)
             };
 
-            // Password Field (Hidden Characters)
+            
             Guna2TextBox txtPassword = new Guna2TextBox
             {
                 PlaceholderText = "Password",
@@ -67,7 +67,7 @@ namespace DSA_SuperMarket_Management_System
                 Margin = new Padding(0, 10, 0, 10)
             };
 
-            // Login Button
+            
             Guna2Button btnLogin = new Guna2Button
             {
                 Text = "Login",
@@ -77,7 +77,7 @@ namespace DSA_SuperMarket_Management_System
                 Margin = new Padding(0, 10, 0, 10)
             };
 
-            // Table Layout for Centered Elements
+            
             TableLayoutPanel layout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
@@ -88,15 +88,15 @@ namespace DSA_SuperMarket_Management_System
                 Padding = new Padding(0, 20, 0, 20)
             };
 
-            //layout.Controls.Add(lblTitle);
+            
             layout.Controls.Add(txtUsername);
             layout.Controls.Add(txtPassword);
             layout.Controls.Add(btnLogin);
 
-            // Adding Layout to Center Panel
+            
             centerPanel.Controls.Add(layout);
 
-            // Login Button Action
+            
             btnLogin.Click += (sender, e) =>
             {
                 if (txtUsername.Text == "admin" && txtPassword.Text == "admin")
@@ -111,7 +111,7 @@ namespace DSA_SuperMarket_Management_System
                 }
             };
 
-            // Adjust Close Button Position on Resize
+            
             this.Resize += (sender, e) =>
             {
                 btnClose.Location = new System.Drawing.Point(this.ClientSize.Width - 50, 10);
@@ -125,7 +125,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void FormLogin_Load(object sender, EventArgs e)
         {
-            // Runs when the form loads
+            
         }
     }
 }

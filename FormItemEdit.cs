@@ -37,10 +37,10 @@ namespace DSA_SuperMarket_Management_System
                 MessageBox.Show("Please enter an Item Code to search.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            //DebugPrintDataStructures();       
+                  
 
             string selectedDataStructure = comboBox2.SelectedItem?.ToString();
-            Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
+            Stopwatch stopwatch = Stopwatch.StartNew(); 
 
             currentItem = null;
 
@@ -67,7 +67,7 @@ namespace DSA_SuperMarket_Management_System
                     return;
             }
 
-            stopwatch.Stop(); // Stop timing
+            stopwatch.Stop(); 
             double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000; // Convert to milliseconds
 
             if (currentItem != null)
@@ -92,27 +92,7 @@ namespace DSA_SuperMarket_Management_System
 
         }
 
-        /*private void DebugPrintDataStructures()
-        {
-            Console.WriteLine("===== Debug: Checking Data Structures =====");
-
-            Console.WriteLine("BST Items:");
-            itemBST.PrintTree(); // Make sure `PrintTree()` prints all elements in BST
-
-            Console.WriteLine("Linked List Items:");
-            Node<Item> current = itemList.Head;
-            while (current != null)
-            {
-                Console.WriteLine($"Linked List Item: {current.Data.ItemCode}");
-                current = current.Next;
-            }
-
-            Console.WriteLine("Dynamic Array Items:");
-            for (int i = 0; i < itemArray.Count; i++)
-            {
-                Console.WriteLine($"Dynamic Array Item: {itemArray.GetAt(i).ItemCode}");
-            }
-        }*/
+       
 
         private void textBox5_TextChanged(object sender, EventArgs e)
         {
@@ -163,9 +143,9 @@ namespace DSA_SuperMarket_Management_System
             };
 
             string selectedDataStructure = comboBox2.SelectedItem?.ToString();
-            Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
+            Stopwatch stopwatch = Stopwatch.StartNew(); 
 
-            // Sort only the selected data structure
+            
             switch (selectedDataStructure)
             {
                 case "Binary Search Tree":
@@ -190,10 +170,10 @@ namespace DSA_SuperMarket_Management_System
                     return;
             }
 
-            stopwatch.Stop(); // Stop timing
+            stopwatch.Stop(); 
             double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
 
-            // Update all data structures
+            
             itemBST.Delete(currentItem);
             itemBST.InsertKey(updatedItem);
             itemList.Update(x => x.ItemCode.Equals(itemCode, StringComparison.OrdinalIgnoreCase), updatedItem);
@@ -252,9 +232,9 @@ namespace DSA_SuperMarket_Management_System
             if (result == DialogResult.Yes)
             {
                 string selectedDataStructure = comboBox2.SelectedItem?.ToString();
-                Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
+                Stopwatch stopwatch = Stopwatch.StartNew(); 
 
-                // Delete only from the selected data structure
+                
                 switch (selectedDataStructure)
                 {
                     case "Binary Search Tree":
@@ -278,10 +258,10 @@ namespace DSA_SuperMarket_Management_System
                         return;
                 }
 
-                stopwatch.Stop(); // Stop timing
+                stopwatch.Stop();
                 double elapsedTime = stopwatch.ElapsedTicks / (double)Stopwatch.Frequency * 1000;
 
-                // Delete from all data structures
+                
                 itemBST.Delete(currentItem);
                 itemList.Remove(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
                 int idx = itemArray.Find(x => x.ItemCode.Equals(currentItem.ItemCode, StringComparison.OrdinalIgnoreCase));
@@ -290,7 +270,7 @@ namespace DSA_SuperMarket_Management_System
                     itemArray.RemoveAt(idx);
                 }
 
-                // Delete from database
+                
                 DeleteFromDatabase(currentItem.ItemCode);
 
                 MessageBox.Show($"Item deleted successfully!\nTime Taken for {selectedDataStructure}: {elapsedTime:F6} ms",

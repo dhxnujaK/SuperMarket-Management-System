@@ -161,10 +161,10 @@ namespace DSA_SuperMarket_Management_System
                         command.ExecuteNonQuery();
                     }
 
-                    // 🔹 Retrieve the last inserted ID
+                    // Retrieve the last inserted ID
                     int userId = (int)connection.LastInsertRowId;
 
-                    // 🔹 Add the new user to all data structures
+                    // Add the new user to all data structures
                     User newUser = new User(userId, name, nic, contactNumber);
                     userBST.InsertKey(newUser);
                     userList.AddLast(newUser);
@@ -263,7 +263,7 @@ namespace DSA_SuperMarket_Management_System
         {
             FormUserSort sortForm = new FormUserSort(userBST, userList, userArray);
 
-            // 🔹 Subscribe to SortingCompleted event
+            
             sortForm.SortingCompleted += (sortedUsers) =>
             {
                 dataGridView1.DataSource = sortedUsers;

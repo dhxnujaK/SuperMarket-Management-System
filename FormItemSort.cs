@@ -25,14 +25,14 @@ namespace DSA_SuperMarket_Management_System
             itemList = list;
             itemArray = array;
 
-            // Populate Sorting Algorithms
+            
             comboBox1.Items.Add("QuickSort");
             comboBox1.Items.Add("MergeSort");
             comboBox1.Items.Add("InsertionSort");
             comboBox1.Items.Add("SelectionSort");
             comboBox1.Items.Add("BubbleSort");
 
-            // Populate Column Names
+            
             comboBox2.Items.Add("ItemName");
             comboBox2.Items.Add("ItemCode");
             comboBox2.Items.Add("Category");
@@ -121,7 +121,7 @@ namespace DSA_SuperMarket_Management_System
                         {
                             insertCmd.Parameters.Clear();
                             insertCmd.Parameters.AddWithValue("@name", item.ItemName);
-                            insertCmd.Parameters.AddWithValue("@code", item.ItemCode); // Ensure UNIQUE constraint is respected
+                            insertCmd.Parameters.AddWithValue("@code", item.ItemCode); 
                             insertCmd.Parameters.AddWithValue("@category", item.Category);
                             insertCmd.Parameters.AddWithValue("@expiry", item.ExpiryDate);
                             insertCmd.Parameters.AddWithValue("@manufacture", item.ManufactureDate);
@@ -279,39 +279,6 @@ namespace DSA_SuperMarket_Management_System
         {
             
         }
-
-       /* private void UpdateDatabase(List<Item> sortedItems)
-        {
-            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
-            {
-                conn.Open();
-                using (SQLiteTransaction transaction = conn.BeginTransaction())
-                {
-                    string insertQuery = "INSERT OR REPLACE INTO Items (ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) " +
-                                         "VALUES (@name, @code, @category, @expiry, @manufacture, @gross, @net, @quantity)";
-
-                    using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
-                    {
-                        foreach (var item in sortedItems)
-                        {
-                            insertCmd.Parameters.Clear();
-                            insertCmd.Parameters.AddWithValue("@name", item.ItemName);
-                            insertCmd.Parameters.AddWithValue("@code", item.ItemCode); // Ensure UNIQUE constraint is respected
-                            insertCmd.Parameters.AddWithValue("@category", item.Category);
-                            insertCmd.Parameters.AddWithValue("@expiry", item.ExpiryDate);
-                            insertCmd.Parameters.AddWithValue("@manufacture", item.ManufactureDate);
-                            insertCmd.Parameters.AddWithValue("@gross", item.GrossAmount);
-                            insertCmd.Parameters.AddWithValue("@net", item.NetAmount);
-                            insertCmd.Parameters.AddWithValue("@quantity", item.Quantity);
-
-                            insertCmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    transaction.Commit();
-                }
-            }
-        }*/
         private List<Item> ConvertDArrayToList(DArray<Item> array)
         {
             List<Item> list = new List<Item>();

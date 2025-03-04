@@ -180,7 +180,7 @@ namespace DSA_SuperMarket_Management_System
         {
             if (node == null) return;
             InOrderTraversal(node.left, result);
-            result.Add(node.Data); // Add data in sorted order
+            result.Add(node.Data); 
             InOrderTraversal(node.right, result);
         }
 
@@ -190,7 +190,7 @@ namespace DSA_SuperMarket_Management_System
             if (node != null)
             {
                 PrintInOrder(node.left);
-                Console.WriteLine(node.Data);  // Print as a new line instead of space
+                Console.WriteLine(node.Data);  
                 PrintInOrder(node.right);
             }
         }

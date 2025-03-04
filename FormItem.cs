@@ -58,9 +58,9 @@ namespace DSA_SuperMarket_Management_System
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Adding scrollbars for the DataGridView
-            dataGridView1.ScrollBars = ScrollBars.Both; // Enables both vertical and horizontal scrollbars
-            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells; // Adjust row height as needed
+          
+            dataGridView1.ScrollBars = ScrollBars.Both; 
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells; 
         }
 
 
@@ -233,10 +233,7 @@ namespace DSA_SuperMarket_Management_System
             textBox4.Clear();
         }
 
-        /*private void FormItem_Load(object sender, EventArgs e)
-        {
-            LoadItemsToGrid();
-        }*/
+        
         private async void FormItem_Load(object sender, EventArgs e)
         {
             FormLoading loadingScreen = new FormLoading();
@@ -244,11 +241,11 @@ namespace DSA_SuperMarket_Management_System
 
             await Task.Run(() =>
             {
-                // Load data in a background thread
+                
                 DataTable dt = LoadItemsFromDatabase();
                 List<Item> items = LoadItemsToDataStructuresInBackground();
 
-                // Ensure UI updates happen on the main thread
+                
                 this.Invoke(new Action(() =>
                 {
                     dataGridView1.DataSource = dt;
@@ -307,7 +304,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
 
-        // All event handlers retained
+        
         private void label1_Click(object sender, EventArgs e) { }
         private void label5_Click(object sender, EventArgs e) { }
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e) { }
