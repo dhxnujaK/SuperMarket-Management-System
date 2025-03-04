@@ -72,13 +72,13 @@ namespace DSA_SuperMarket_Management_System
 
             User updatedUser = new User(currentUser.Id, name, newNIC, contactNumber);
 
-            // Remove old user from all data structures
+            // Remove old user 
             userList.Remove(user => user.NIC == oldNIC);
             userBST.Delete(currentUser);
             int index = userArray.Find(user => user.NIC == oldNIC);
             if (index != -1) userArray.RemoveAt(index);
 
-            // Add updated user
+         
             userList.AddLast(updatedUser);
             userBST.InsertKey(updatedUser);
             userArray.Add(updatedUser);
@@ -100,18 +100,13 @@ namespace DSA_SuperMarket_Management_System
             DialogResult result = MessageBox.Show("Are you sure you want to delete this user?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                // 🔹 Remove user from all data structures
+                
                 userList.Remove(user => user.NIC == currentUser.NIC);
                 userBST.Delete(currentUser);
                 int index = userArray.Find(user => user.NIC == currentUser.NIC);
                 if (index != -1) userArray.RemoveAt(index);
 
-                // 🔹 Remove from database
                 DeleteFromDatabase(currentUser.NIC);
-
-                // 🔹 Refresh the UI in FormUser after deletion
-                //FormUser parentForm = (FormUser)Application.OpenForms["FormUser"];
-                //parentForm?.LoadUserData();
 
                 MessageBox.Show("User deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
@@ -170,7 +165,7 @@ namespace DSA_SuperMarket_Management_System
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            // Handle text change if needed
+            
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)

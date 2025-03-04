@@ -12,7 +12,7 @@ namespace DSA_SuperMarket_Management_System
     {
         private readonly string connectionString = "Data Source=UserDatabase.db;Version=3;";
 
-        // Using generics with User type
+        
         private BinarySearchTree<User> userBST = new BinarySearchTree<User>();
         private sLinkedList<User> userList = new sLinkedList<User>();
         private DArray<User> userArray = new DArray<User>();
@@ -89,7 +89,7 @@ namespace DSA_SuperMarket_Management_System
                             dataGridView1.Refresh();
                         }
 
-                        // Clearing data structures before reloading
+                        // Clearing data structures
                         userBST = new BinarySearchTree<User>();
                         userList = new sLinkedList<User>();
                         userArray = new DArray<User>();
@@ -161,7 +161,7 @@ namespace DSA_SuperMarket_Management_System
                         command.ExecuteNonQuery();
                     }
 
-                    // Retrieve the last inserted ID
+                  
                     int userId = (int)connection.LastInsertRowId;
 
                     // Add the new user to all data structures

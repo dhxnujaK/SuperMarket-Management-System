@@ -15,7 +15,7 @@ namespace DSA_SuperMarket_Management_System
         private sLinkedList<User> userList;
         private DArray<User> userArray;
 
-        // 🔹 Event to notify FormUser that sorting is completed
+       
         public event Action<List<User>> SortingCompleted;
 
         public FormUserSort(BinarySearchTree<User> bst, sLinkedList<User> list, DArray<User> array)
@@ -73,7 +73,7 @@ namespace DSA_SuperMarket_Management_System
 
             MessageBox.Show($"Sorting Completed!\nTime Taken: {stopwatch.ElapsedMilliseconds} ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // 🔹 Trigger the event to notify FormUser
+           
             SortingCompleted?.Invoke(users);
 
             this.Close();
@@ -100,12 +100,12 @@ namespace DSA_SuperMarket_Management_System
 
         private void UpdateDataStructures(List<User> sortedUsers)
         {
-            // First, clear all existing data structures
+            
             userArray = new DArray<User>();
             userList = new sLinkedList<User>();
             userBST = new BinarySearchTree<User>();
 
-            // Add sorted users back into all the data structures
+           
             foreach (var user in sortedUsers)
             {
                 userArray.Add(user);
