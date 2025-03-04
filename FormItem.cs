@@ -57,7 +57,12 @@ namespace DSA_SuperMarket_Management_System
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            // Adding scrollbars for the DataGridView
+            dataGridView1.ScrollBars = ScrollBars.Both; // Enables both vertical and horizontal scrollbars
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells; // Adjust row height as needed
         }
+
 
         private void CustomizeUI()
         {
@@ -124,6 +129,20 @@ namespace DSA_SuperMarket_Management_System
 
             toggleDarkMode.Text = isDarkMode ? "☼" : "☾";
         }
+        private void UpdateDataStructures(List<Item> items)
+        {
+            itemBST = new BinarySearchTree<Item>();
+            itemList = new sLinkedList<Item>();
+            itemArray = new DArray<Item>();
+
+            foreach (var item in items)
+            {
+                itemBST.InsertKey(item);
+                itemList.AddLast(item);
+                itemArray.Add(item);
+            }
+        }
+
         private void LoadItemsToDataStructures()
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
@@ -214,9 +233,76 @@ namespace DSA_SuperMarket_Management_System
             textBox4.Clear();
         }
 
-        private void FormItem_Load(object sender, EventArgs e)
+        /*private void FormItem_Load(object sender, EventArgs e)
         {
             LoadItemsToGrid();
+        }*/
+        private async void FormItem_Load(object sender, EventArgs e)
+        {
+            FormLoading loadingScreen = new FormLoading();
+            loadingScreen.Show();
+
+            await Task.Run(() =>
+            {
+                // Load data in a background thread
+                DataTable dt = LoadItemsFromDatabase();
+                List<Item> items = LoadItemsToDataStructuresInBackground();
+
+                // Ensure UI updates happen on the main thread
+                this.Invoke(new Action(() =>
+                {
+                    dataGridView1.DataSource = dt;
+                    dataGridView1.Refresh();
+                    UpdateDataStructures(items);
+                    loadingScreen.Close();
+                }));
+            });
+        }
+        private List<Item> LoadItemsToDataStructuresInBackground()
+        {
+            List<Item> items = new List<Item>();
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity FROM Items";
+                using (SQLiteCommand cmd = new SQLiteCommand(query, conn))
+                {
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Item item = new Item
+                            {
+                                ItemName = reader["ItemName"].ToString(),
+                                ItemCode = reader["ItemCode"].ToString(),
+                                Category = reader["Category"].ToString(),
+                                ExpiryDate = reader["ExpiryDate"].ToString(),
+                                ManufactureDate = reader["ManufactureDate"].ToString(),
+                                GrossAmount = Convert.ToDouble(reader["GrossAmount"]),
+                                NetAmount = Convert.ToDouble(reader["NetAmount"]),
+                                Quantity = Convert.ToInt32(reader["Quantity"])
+                            };
+                            items.Add(item);
+                        }
+                    }
+                }
+            }
+            return items;
+        }
+
+        private DataTable LoadItemsFromDatabase()
+        {
+            DataTable dt = new DataTable();
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT Id, ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity FROM Items";
+                using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(query, conn))
+                {
+                    adapter.Fill(dt);
+                }
+            }
+            return dt;
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
@@ -254,6 +340,11 @@ namespace DSA_SuperMarket_Management_System
             formItemSort.ShowDialog();
             LoadItemsToGrid();
             LoadItemsToDataStructures();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

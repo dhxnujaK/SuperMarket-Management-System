@@ -314,9 +314,9 @@
             this.label10.Location = new System.Drawing.Point(100, 125);
             this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(239, 22);
+            this.label10.Size = new System.Drawing.Size(218, 22);
             this.label10.TabIndex = 42;
-            this.label10.Text = "Select The Sorting Algorithm";
+            this.label10.Text = "Select The Data Structure";
             this.label10.Click += new System.EventHandler(this.label10_Click);
             // 
             // comboBox2
