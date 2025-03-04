@@ -76,20 +76,68 @@ namespace DSA_SuperMarket_Management_System
                     return;
             }
 
+            // Delete existing records from the database
+            DeleteAllItemsFromDatabase();
 
             // Perform Sorting
-            Stopwatch stopwatch = Stopwatch.StartNew(); // Start measuring time
+            Stopwatch stopwatch = Stopwatch.StartNew(); // Start timing
             SortItems(items, selectedAlgorithm, selectedColumn);
-            stopwatch.Stop(); // Stop measuring time
+            stopwatch.Stop(); // Stop timing
 
             // Update Data Structures and Database
             UpdateDataStructures(items);
             UpdateDatabase(items);
 
-            MessageBox.Show($"Sorting Completed!\nTime Taken: {stopwatch.ElapsedMilliseconds} ms",
-       "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Sorting Completed!\nTime Taken: {stopwatch.ElapsedMilliseconds} ms", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
+
+        private void DeleteAllItemsFromDatabase()
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                string deleteQuery = "DELETE FROM Items"; // Delete all data in the Items table
+                using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, conn))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
+
+        private void UpdateDatabase(List<Item> sortedItems)
+        {
+            using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+            {
+                conn.Open();
+                using (SQLiteTransaction transaction = conn.BeginTransaction())
+                {
+                    string insertQuery = "INSERT OR REPLACE INTO Items (ItemName, ItemCode, Category, ExpiryDate, ManufactureDate, GrossAmount, NetAmount, Quantity) " +
+                                         "VALUES (@name, @code, @category, @expiry, @manufacture, @gross, @net, @quantity)";
+
+                    using (SQLiteCommand insertCmd = new SQLiteCommand(insertQuery, conn))
+                    {
+                        foreach (var item in sortedItems)
+                        {
+                            insertCmd.Parameters.Clear();
+                            insertCmd.Parameters.AddWithValue("@name", item.ItemName);
+                            insertCmd.Parameters.AddWithValue("@code", item.ItemCode); // Ensure UNIQUE constraint is respected
+                            insertCmd.Parameters.AddWithValue("@category", item.Category);
+                            insertCmd.Parameters.AddWithValue("@expiry", item.ExpiryDate);
+                            insertCmd.Parameters.AddWithValue("@manufacture", item.ManufactureDate);
+                            insertCmd.Parameters.AddWithValue("@gross", item.GrossAmount);
+                            insertCmd.Parameters.AddWithValue("@net", item.NetAmount);
+                            insertCmd.Parameters.AddWithValue("@quantity", item.Quantity);
+
+                            insertCmd.ExecuteNonQuery();
+                        }
+                    }
+
+                    transaction.Commit();
+                }
+            }
+        }
+
 
         private void SortWithKey<TValue>(List<Item> items, string algorithm, Func<Item, TValue> keySelector) where TValue : IComparable<TValue>
         {
@@ -232,7 +280,7 @@ namespace DSA_SuperMarket_Management_System
             
         }
 
-        private void UpdateDatabase(List<Item> sortedItems)
+       /* private void UpdateDatabase(List<Item> sortedItems)
         {
             using (SQLiteConnection conn = new SQLiteConnection(connectionString))
             {
@@ -263,7 +311,7 @@ namespace DSA_SuperMarket_Management_System
                     transaction.Commit();
                 }
             }
-        }
+        }*/
         private List<Item> ConvertDArrayToList(DArray<Item> array)
         {
             List<Item> list = new List<Item>();
