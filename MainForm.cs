@@ -14,7 +14,7 @@ namespace DSA_SuperMarket_Management_System
     public partial class MainForm : Form
     {
         private Guna2Panel titleBar;
-        private Guna2Button closeButton, toggleDarkMode;
+        private Guna2Button closeButton, toggleDarkMode, btnLogout;
         private Guna2Panel sidebar;
         private Guna2Button btnItems, btnUsers;
         private Guna2ShadowForm shadowEffect;
@@ -25,7 +25,7 @@ namespace DSA_SuperMarket_Management_System
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.BackColor = Color.FromArgb(173, 216, 230); 
+            this.BackColor = Color.FromArgb(173, 216, 230);
 
             ApplyShadow();
             CreateCustomTitleBar();
@@ -81,7 +81,7 @@ namespace DSA_SuperMarket_Management_System
                 Height = 40,
                 Dock = DockStyle.Right
             };
-            closeButton.Click += (s, e) => this.Close();
+            closeButton.Click += (s, e) => Application.Exit();
             titleBar.Controls.Add(closeButton);
 
             titleBar.MouseDown += (s, e) =>
@@ -91,7 +91,7 @@ namespace DSA_SuperMarket_Management_System
                 this.WndProc(ref msg);
             };
         }
-        
+
         private void CreateSidebar()
         {
             sidebar = new Guna2Panel
@@ -129,6 +129,21 @@ namespace DSA_SuperMarket_Management_System
             };
             btnUsers.Click += btnUsers_Click;
 
+            // Add Logout Button
+            btnLogout = new Guna2Button
+            {
+                Text = "Logout",
+                Dock = DockStyle.Bottom,
+                Height = 60,
+                BorderRadius = 5,
+                FillColor = Color.FromArgb(255, 69, 58), // Red color for logout
+                ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Animated = true
+            };
+            btnLogout.Click += btnLogout_Click;  // Link to the Logout functionality
+
+            sidebar.Controls.Add(btnLogout);  // Add Logout button to the sidebar
             sidebar.Controls.Add(btnUsers);
             sidebar.Controls.Add(btnItems);
         }
@@ -157,8 +172,6 @@ namespace DSA_SuperMarket_Management_System
             this.Show();
         }
 
-
-
         private async void btnUsers_Click(object sender, EventArgs e)
         {
             FormLoading loadingScreen = new FormLoading();
@@ -171,24 +184,18 @@ namespace DSA_SuperMarket_Management_System
             this.Show();
         }
 
-        /*private async void button1_Click(object sender, EventArgs e)
+        private void btnLogout_Click(object sender, EventArgs e)
         {
-            FormLoading loadingScreen = new FormLoading();
-            loadingScreen.ShowLoadingScreen(2000); // Show for 2 seconds
-
-            await Task.Delay(2000); 
-            FormItem formItem = new FormItem();
+            // Hide the current form (MainForm)
             this.Hide();
-            formItem.ShowDialog();
-            this.Show();
-        }*/
 
-        private void label2_Click(object sender, EventArgs e)
-        {
+            // Create and show the login form
+            FormLogin formLogin = new FormLogin();
+            formLogin.ShowDialog(); // Show the login form
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-        }
+        private void label2_Click(object sender, EventArgs e) { }
+
+        private void MainForm_Load(object sender, EventArgs e) { }
     }
 }
