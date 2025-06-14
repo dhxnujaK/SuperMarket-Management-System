@@ -46,6 +46,11 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 - Select data structure for item storage
 - Demonstrate data structure access time
 
+ ### 3. 🗃️ **Database Integration**
+- Stores all user and item data using **SQLite**
+- Lightweight embedded database – no external server needed
+- Ensures data persistence between sessions
+
 ---
 
 ## 📸 Screenshots
@@ -79,3 +84,22 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 ---
 
 ## 📂 File Structure Overview
+📦 SuperMarket-Management-System
+├── Sorting Algorithms:
+│ ├── BubbleSort.cs
+│ ├── InsertionSort.cs
+│ ├── SelectionSort.cs
+│ ├── MergeSort.cs
+│ └── QuickSort.cs
+├── Data Structures:
+│ ├── LinkedList.cs
+│ ├── BinarySearchTree.cs
+│ └── DynamicArray.cs
+├── Forms (UI):
+│ ├── FormUser.cs / FormUserSort.cs / FormUserEdit.cs
+│ ├── FormItem.cs / FormItemEdit.cs
+│ ├── FormLogin.cs / MainForm.cs
+├── Database Access:
+│ ├── UserDatabase.cs
+│ └── ItemDatabase.cs
+├── App.config / Program.cs / .sln
