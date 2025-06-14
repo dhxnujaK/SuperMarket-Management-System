@@ -119,4 +119,5 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 ## 👨‍💻 Authors
 - Dhanuja Kahatapitiya 
 - Nethmini Herath
+- Irusha Sansuka
 
