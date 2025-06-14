@@ -57,7 +57,10 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 - Item CRUD operations and storage options
 - Category-based classification
 
-*(You can view them directly in the GitHub “Images” section or embed later)*
+![Screenshot (45)](https://github.com/user-attachments/assets/bb0e0e4b-d398-4e84-9bca-11e34e5a793d)
+![Screenshot (45)](https://github.com/user-attachments/assets/00be21fd-051e-4a23-ac9a-b2823e70fd29)
+
+
 
 ---
 
