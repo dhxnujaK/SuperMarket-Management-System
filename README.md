@@ -56,9 +56,14 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 - Sorting time shown as feedback
 - Item CRUD operations and storage options
 - Category-based classification
-
-![Screenshot (45)](https://github.com/user-attachments/assets/bb0e0e4b-d398-4e84-9bca-11e34e5a793d)
-![Screenshot (45)](https://github.com/user-attachments/assets/00be21fd-051e-4a23-ac9a-b2823e70fd29)
+![Screenshot (35)](https://github.com/user-attachments/assets/6dc5ee6e-08be-47ce-a7e2-afc5a9443e94)
+![Screenshot (37)](https://github.com/user-attachments/assets/541dc584-28b5-4e4b-91d7-1769b3b1ac7a)
+![Screenshot (39)](https://github.com/user-attachments/assets/12beeb1c-025f-4c93-86f3-8dc4a8708291)
+![Screenshot (41)](https://github.com/user-attachments/assets/35fed1d2-2a13-47bb-9a34-4da772467ef6)
+![Screenshot (40)](https://github.com/user-attachments/assets/b6260128-9e57-4dc6-8a4a-8dcaabf53e61)
+![Screenshot (81)](https://github.com/user-attachments/assets/8ca62c9d-b9b7-43b1-9661-ef64515411ee)
+![Screenshot (42)](https://github.com/user-attachments/assets/9c82e5b1-902c-4419-b532-00b282043267)
+![Screenshot (80)](https://github.com/user-attachments/assets/9b18f62a-c042-45d0-9210-3bf563c7a3b5)
 
 
 
