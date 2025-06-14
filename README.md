@@ -83,23 +83,39 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 
 ---
 
-## 📂 File Structure Overview
+## 📂 Folder & File Structure
+
+```plaintext
 📦 SuperMarket-Management-System
-├── Sorting Algorithms:
-│ ├── BubbleSort.cs
-│ ├── InsertionSort.cs
-│ ├── SelectionSort.cs
-│ ├── MergeSort.cs
-│ └── QuickSort.cs
-├── Data Structures:
-│ ├── LinkedList.cs
-│ ├── BinarySearchTree.cs
-│ └── DynamicArray.cs
-├── Forms (UI):
-│ ├── FormUser.cs / FormUserSort.cs / FormUserEdit.cs
-│ ├── FormItem.cs / FormItemEdit.cs
-│ ├── FormLogin.cs / MainForm.cs
-├── Database Access:
-│ ├── UserDatabase.cs
-│ └── ItemDatabase.cs
-├── App.config / Program.cs / .sln
+├── Sorting Algorithms
+│   ├── BubbleSort.cs
+│   ├── InsertionSort.cs
+│   ├── MergeSort.cs
+│   ├── QuickSort.cs
+│   └── SelectionSort.cs
+├── Data Structures
+│   ├── LinkedList.cs
+│   ├── BinarySearchTree.cs
+│   └── DynamicArray.cs
+├── Forms
+│   ├── FormUser.cs
+│   ├── FormUserEdit.cs
+│   ├── FormUserSort.cs
+│   ├── FormItem.cs
+│   ├── FormItemEdit.cs
+│   ├── FormLogin.cs
+│   └── MainForm.cs
+├── Database
+│   ├── UserDatabase.cs
+│   └── ItemDatabase.cs
+├── App.config
+├── Program.cs
+├── SuperMarket-Management-System.sln
+└── SuperMarket-Management-System.csproj
+
+---
+
+## 👨‍💻 Authors
+-Dhanuja Kahatapitiya
+-Nethmini Herath
+
