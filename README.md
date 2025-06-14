@@ -113,9 +113,10 @@ A Data Structures & Algorithms (DSA)-oriented supermarket management desktop app
 ├── SuperMarket-Management-System.sln
 └── SuperMarket-Management-System.csproj
 
+```
 ---
 
 ## 👨‍💻 Authors
--Dhanuja Kahatapitiya
--Nethmini Herath
+- Dhanuja Kahatapitiya 
+- Nethmini Herath
 
